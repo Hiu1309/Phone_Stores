@@ -6,9 +6,11 @@ import javax.swing.table.*;
 
 public class StorePanel extends JPanel{
     DefaultTableModel modelSP, modelTT;
-    JTextField searchTf;
-    JButton searchBtn;
+    JTextField searchTf, phoneTf, tongTf, nhanTf, thoiTf;
+    JButton searchBtn, thanhToanBtn, InBillBtn;
     JComboBox filterBox;
+    JLabel nameLabel;
+
     public StorePanel(){
         setLayout(null);
 
@@ -63,8 +65,6 @@ public class StorePanel extends JPanel{
         payTitle.setBounds(95,35,200,50);
         payTitle.setFont(new Font("Arial", Font.BOLD, 20));
 
-        //Label hiện tên khách hàng khi có 
-
         //Table hiện thị sản phẩm trong mục thanh toán
         modelTT = new DefaultTableModel();
         JTable payTable = new JTable();
@@ -75,11 +75,31 @@ public class StorePanel extends JPanel{
         modelTT.addColumn("Giá");
         modelTT.addColumn("Số lượng");
 
+        //Thông tin thanh toán
+        nameLabel = new JLabel("Khách hàng: ");
+        JLabel phoneLabel = new JLabel("Nhập sđt:");
+        JLabel tongLabel = new JLabel("Tổng tiền:");
+        JLabel nhanLabel = new JLabel("Tiền nhận:");
+        JLabel thoiLabel = new JLabel("Tiền thối:");
+
+        phoneTf = new JTextField();
+        tongTf = new JTextField();
+        nhanTf = new JTextField();
+        thoiTf = new JTextField();
+        thoiTf.setEditable(false);
+
+        thanhToanBtn = new JButton("Thanh Toán");
+        InBillBtn = new JButton("In bill");
+        
+        phoneLabel.setBounds(20,400,150,20);
+        phoneTf.setBounds(85,402,150,20);
+        nameLabel.setBounds(70,430,150,20);
+
+
 
         //Thêm giao diện vào
         spPanel.add(titlelb);spPanel.add(searchBtn);spPanel.add(searchTf);spPanel.add(filterBox);spPanel.add(sp);
-        payPanel.add(payTitle);
-        payPanel.add(payScrollPane);
+        payPanel.add(payTitle);payPanel.add(nameLabel);payPanel.add(payScrollPane);payPanel.add(phoneLabel);payPanel.add(phoneTf);
         add(spPanel);add(payPanel);
     }
 }
