@@ -12,10 +12,13 @@ public class LoginForm extends JFrame {
     private JButton loginButton, registerButton;
 
     public LoginForm() {
+        ImageIcon favicon = new ImageIcon("img/newera-logo.png");
+        setIconImage(favicon.getImage());
         setTitle("Đăng nhập");
         setSize(300, 230);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
         setLayout(null);
 
         JLabel userLabel = new JLabel("Username:");

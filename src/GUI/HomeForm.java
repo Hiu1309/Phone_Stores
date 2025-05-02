@@ -9,8 +9,11 @@ public class HomeForm extends JFrame {
     private JPanel contentPanel;  
 
     public HomeForm() {
+        ImageIcon favicon = new ImageIcon("img/newera-logo.png");
+        setIconImage(favicon.getImage());
         setTitle("Trang chính");
         setSize(1200, 700);
+        setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());

@@ -14,10 +14,11 @@ public class RegisterForm extends JFrame {
     private JButton registerButton, backButton;
 
     public RegisterForm() {
-        ImageIcon favicon = new ImageIcon("src/img/NewEra-icon.png");
+        ImageIcon favicon = new ImageIcon("img/newera-logo.png");
         setIconImage(favicon.getImage());
         setTitle("Sign up to start shopping");
         setSize(700, 450);
+        setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
