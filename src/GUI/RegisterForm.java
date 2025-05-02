@@ -4,7 +4,9 @@ import BLL.EmployeeBLL;
 import DTO.EmployeeDTO;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class RegisterForm extends JFrame {
     private JTextField usernameField, fullNameField, phoneField;
@@ -12,57 +14,101 @@ public class RegisterForm extends JFrame {
     private JButton registerButton, backButton;
 
     public RegisterForm() {
-        setTitle("Đăng ký nhân viên");
-        setSize(350, 350);
+        ImageIcon favicon = new ImageIcon("src/img/NewEra-icon.png");
+        setIconImage(favicon.getImage());
+        setTitle("Sign up to start shopping");
+        setSize(700, 450);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(null);
+        setResizable(false);
+        setLayout(new BorderLayout());
+       
 
-        JLabel userLabel = new JLabel("Username:");
-        userLabel.setBounds(30, 30, 80, 25);
-        add(userLabel);
+        // Left panel (màu xanh lá)
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBackground(new Color(59, 228, 119));
+        leftPanel.setPreferredSize(new Dimension(180, 550));
+        add(leftPanel, BorderLayout.WEST);
+
+        // Right panel (form đăng ký)
+        JPanel rightPanel = new JPanel(null);
+        rightPanel.setBackground(new Color(18, 18, 18));
+        add(rightPanel, BorderLayout.CENTER);
+
+        JLabel title = new JLabel("Sign up to start shopping");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Arial", Font.BOLD, 24));
+        title.setBounds(100, 30, 400, 30);
+        rightPanel.add(title);
+
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setForeground(Color.WHITE);
+        usernameLabel.setBounds(60, 100, 100, 25);
+        rightPanel.add(usernameLabel);
 
         usernameField = new JTextField();
-        usernameField.setBounds(120, 30, 180, 25);
-        add(usernameField);
+        usernameField.setBounds(180, 100, 250, 30);
+        rightPanel.add(usernameField);
 
-        JLabel passLabel = new JLabel("Password:");
-        passLabel.setBounds(30, 70, 80, 25);
-        add(passLabel);
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setForeground(Color.WHITE);
+        passwordLabel.setBounds(60, 220, 100, 25);
+        rightPanel.add(passwordLabel);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(120, 70, 180, 25);
-        add(passwordField);
+        passwordField.setBounds(180, 220, 250, 30);
+        rightPanel.add(passwordField);
 
         JLabel nameLabel = new JLabel("Full Name:");
-        nameLabel.setBounds(30, 110, 80, 25);
-        add(nameLabel);
+        nameLabel.setForeground(Color.WHITE);
+        nameLabel.setBounds(60, 160, 100, 25);
+        rightPanel.add(nameLabel);
 
         fullNameField = new JTextField();
-        fullNameField.setBounds(120, 110, 180, 25);
-        add(fullNameField);
+        fullNameField.setBounds(180, 160, 250, 30);
+        rightPanel.add(fullNameField);
 
         JLabel phoneLabel = new JLabel("Phone:");
-        phoneLabel.setBounds(30, 150, 80, 25);
-        add(phoneLabel);
+        phoneLabel.setForeground(Color.WHITE);
+        phoneLabel.setBounds(60, 280, 100, 25);
+        rightPanel.add(phoneLabel);
 
         phoneField = new JTextField();
-        phoneField.setBounds(120, 150, 180, 25);
-        add(phoneField);
+        phoneField.setBounds(180, 280, 250, 30);
+        rightPanel.add(phoneField);
 
-        registerButton = new JButton("Register");
-        registerButton.setBounds(60, 210, 100, 30);
-        add(registerButton);
+        registerButton = new JButton("Confirm");
+        registerButton.setBounds(310, 330, 120, 35);
+        registerButton.setBackground(new Color(30, 215, 96));
+        registerButton.setForeground(Color.black);
+        rightPanel.add(registerButton);
 
-        backButton = new JButton("Back");
-        backButton.setBounds(180, 210, 100, 30);
-        add(backButton);
+        JLabel question = new JLabel("Already have an account?");
+        question.setForeground(new Color(188, 186, 186));
+        question.setBounds(130, 380, 180, 25);
+        rightPanel.add(question);
 
+        JButton loginLink = new JButton("Log in here");
+        loginLink.setBounds(260, 378, 120, 28);
+        loginLink.setBorderPainted(false);
+        loginLink.setForeground(Color.CYAN);
+        loginLink.setContentAreaFilled(false);
+        loginLink.setFocusPainted(false);
+        rightPanel.add(loginLink);
+
+        // Xử lý sự kiện
         registerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String username = usernameField.getText().trim();
-                    String password = new String(passwordField.getPassword());
+                    String password = new String(passwordField.getPassword()).trim();
+                    String fullName = fullNameField.getText().trim();
+                    String phone = phoneField.getText().trim();
+
+                    if (username.isEmpty() || password.isEmpty() || fullName.isEmpty() || phone.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                        return;
+                    }
 
                     if (username.contains(" ")) {
                         JOptionPane.showMessageDialog(null, "Username không được chứa khoảng trắng!");
@@ -83,15 +129,14 @@ public class RegisterForm extends JFrame {
                     EmployeeDTO emp = new EmployeeDTO();
                     emp.setUsername(username);
                     emp.setPassword(password);
-                    emp.setFullName(fullNameField.getText());
-                    emp.setPhone(phoneField.getText());
+                    emp.setFullName(fullName);
+                    emp.setPhone(phone);
                     emp.setRole("staff");
-                    bll.register(emp);
 
+                    bll.register(emp);
                     JOptionPane.showMessageDialog(null, "Đăng ký thành công!");
                     new LoginForm();
                     dispose();
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Lỗi đăng ký");
@@ -99,7 +144,7 @@ public class RegisterForm extends JFrame {
             }
         });
 
-        backButton.addActionListener(new ActionListener() {
+        loginLink.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new LoginForm();
                 dispose();
