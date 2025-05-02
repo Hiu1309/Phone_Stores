@@ -54,15 +54,6 @@ CREATE TABLE `employees` (
 
 -- --------------------------------------------------------
 
---
--- Cấu trúc bảng cho bảng `productcategories`
---
-
-CREATE TABLE `productcategories` (
-  `CategoryID` int(11) NOT NULL,
-  `CategoryName` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- --------------------------------------------------------
 
 --
@@ -74,8 +65,7 @@ CREATE TABLE `products` (
   `ProductName` varchar(100) NOT NULL,
   `Brand` varchar(50) DEFAULT NULL,
   `Price` decimal(15,2) NOT NULL,
-  `Stock` int(11) DEFAULT 0,
-  `CategoryID` int(11) DEFAULT NULL
+  `Stock` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -190,15 +180,12 @@ ALTER TABLE `employees`
 --
 -- Chỉ mục cho bảng `productcategories`
 --
-ALTER TABLE `productcategories`
-  ADD PRIMARY KEY (`CategoryID`);
 
 --
 -- Chỉ mục cho bảng `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`ProductID`),
-  ADD KEY `CategoryID` (`CategoryID`);
+  ADD PRIMARY KEY (`ProductID`);
 
 --
 -- Chỉ mục cho bảng `purchaseinvoicedetails`
@@ -255,10 +242,7 @@ ALTER TABLE `employees`
   MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT cho bảng `productcategories`
---
-ALTER TABLE `productcategories`
-  MODIFY `CategoryID` int(11) NOT NULL AUTO_INCREMENT;
+-
 
 --
 -- AUTO_INCREMENT cho bảng `products`
@@ -300,11 +284,7 @@ ALTER TABLE `suppliers`
 -- Các ràng buộc cho các bảng đã đổ
 --
 
---
--- Các ràng buộc cho bảng `products`
---
-ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`CategoryID`) REFERENCES `productcategories` (`CategoryID`);
+
 
 --
 -- Các ràng buộc cho bảng `purchaseinvoicedetails`

@@ -3,6 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import GUI.StorePanel;
 
 public class HomeForm extends JFrame {
     private JPanel contentPanel;  
@@ -18,7 +19,7 @@ public class HomeForm extends JFrame {
         JPanel menuPanel = new JPanel();
         menuPanel.setPreferredSize(new Dimension(150, 600));
         menuPanel.setLayout(null);
-<<<<<<< HEAD
+
         menuPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         JButton storeBtn = new JButton("Cửa hàng");
         storeBtn.setBounds(10, 100, 120, 50);
@@ -28,16 +29,7 @@ public class HomeForm extends JFrame {
         accountBtn.setBounds(10, 300, 120, 50);
         JButton statsBtn = new JButton("Thống kê");
         statsBtn.setBounds(10, 400, 120, 50);
-=======
-        JButton storeBtn = new JButton("Cửa hàng");
-        storeBtn.setBounds(10, 20, 100, 30);
-        JButton warehouseBtn = new JButton("Kho");
-        warehouseBtn.setBounds(10, 70, 100, 30);
-        JButton accountBtn = new JButton("Tài khoản");
-        accountBtn.setBounds(10, 120, 100, 30);
-        JButton statsBtn = new JButton("Thống kê");
-        statsBtn.setBounds(10, 170, 100, 30);
->>>>>>> main
+
 
         menuPanel.add(storeBtn);
         menuPanel.add(warehouseBtn);
@@ -46,7 +38,7 @@ public class HomeForm extends JFrame {
 
         // Panel nội dung trung tâm với CardLayout
         contentPanel = new JPanel(new CardLayout());
-        contentPanel.add(new JLabel("Giao diện Cửa hàng"), "store");
+        contentPanel.add(new StorePanel(), "store");
         contentPanel.add(new JLabel("Giao diện Kho"), "warehouse");
         contentPanel.add(new JLabel("Giao diện Tài khoản"), "account");
         contentPanel.add(new JLabel("Giao diện Thống kê"), "stats");
