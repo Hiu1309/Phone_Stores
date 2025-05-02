@@ -1,55 +1,111 @@
 package GUI;
 
-import BLL.UserBLL;
+import BLL.EmployeeBLL;
+import DTO.EmployeeDTO;
 
 import javax.swing.*;
+import java.awt.event.*;
 
 public class RegisterForm extends JFrame {
-    private JTextField txtUser;
-    private JPasswordField txtPass;
-    private UserBLL bll = new UserBLL();
+    private JTextField usernameField, fullNameField, phoneField;
+    private JPasswordField passwordField;
+    private JButton registerButton, backButton;
 
     public RegisterForm() {
-        setTitle("Đăng ký");
-        setSize(300, 250);
-        setLayout(null);
-        setLocationRelativeTo(null);
+        setTitle("Đăng ký nhân viên");
+        setSize(350, 350);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(null);
 
-        add(new JLabel("Username:")).setBounds(20, 60, 80, 20);
-        txtUser = new JTextField();
-        txtUser.setBounds(100, 60, 120, 20);
-        add(txtUser);
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setBounds(30, 30, 80, 25);
+        add(userLabel);
 
-        add(new JLabel("Password:")).setBounds(20, 100, 80, 20);
-        txtPass = new JPasswordField();
-        txtPass.setBounds(100, 100, 120, 20);
-        add(txtPass);
+        usernameField = new JTextField();
+        usernameField.setBounds(120, 30, 180, 25);
+        add(usernameField);
 
-        JButton btnRegister = new JButton("Đăng ký");
-        btnRegister.setBounds(80, 140, 120, 30);
-        add(btnRegister);
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setBounds(30, 70, 80, 25);
+        add(passLabel);
 
-        JButton btnBack = new JButton("← Quay lại");
-        btnBack.setBounds(80, 180, 120, 25);
-        add(btnBack);
+        passwordField = new JPasswordField();
+        passwordField.setBounds(120, 70, 180, 25);
+        add(passwordField);
 
-        btnRegister.addActionListener(e -> {
-            String user = txtUser.getText().trim();
-            String pass = new String(txtPass.getPassword());
-            String result = bll.validateRegister(user, pass);
-            if (result.equals("OK")) {
-                JOptionPane.showMessageDialog(this, "Đăng ký thành công!");
-                dispose();
-                new LoginForm().setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, result);
+        JLabel nameLabel = new JLabel("Full Name:");
+        nameLabel.setBounds(30, 110, 80, 25);
+        add(nameLabel);
+
+        fullNameField = new JTextField();
+        fullNameField.setBounds(120, 110, 180, 25);
+        add(fullNameField);
+
+        JLabel phoneLabel = new JLabel("Phone:");
+        phoneLabel.setBounds(30, 150, 80, 25);
+        add(phoneLabel);
+
+        phoneField = new JTextField();
+        phoneField.setBounds(120, 150, 180, 25);
+        add(phoneField);
+
+        registerButton = new JButton("Register");
+        registerButton.setBounds(60, 210, 100, 30);
+        add(registerButton);
+
+        backButton = new JButton("Back");
+        backButton.setBounds(180, 210, 100, 30);
+        add(backButton);
+
+        registerButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String username = usernameField.getText().trim();
+                    String password = new String(passwordField.getPassword());
+
+                    if (username.contains(" ")) {
+                        JOptionPane.showMessageDialog(null, "Username không được chứa khoảng trắng!");
+                        return;
+                    }
+
+                    if (password.length() < 6) {
+                        JOptionPane.showMessageDialog(null, "Password phải có ít nhất 6 ký tự!");
+                        return;
+                    }
+
+                    EmployeeBLL bll = new EmployeeBLL();
+                    if (bll.isUsernameExist(username)) {
+                        JOptionPane.showMessageDialog(null, "Username đã tồn tại!");
+                        return;
+                    }
+
+                    EmployeeDTO emp = new EmployeeDTO();
+                    emp.setUsername(username);
+                    emp.setPassword(password);
+                    emp.setFullName(fullNameField.getText());
+                    emp.setPhone(phoneField.getText());
+                    emp.setRole("staff");
+                    bll.register(emp);
+
+                    JOptionPane.showMessageDialog(null, "Đăng ký thành công!");
+                    new LoginForm();
+                    dispose();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Lỗi đăng ký");
+                }
             }
         });
 
-        btnBack.addActionListener(e -> {
-            dispose();
-            new LoginForm().setVisible(true);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new LoginForm();
+                dispose();
+            }
         });
+
+        setVisible(true);
     }
 }
