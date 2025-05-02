@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 02, 2025 lúc 03:38 AM
+-- Thời gian đã tạo: Th5 02, 2025 lúc 09:20 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -52,7 +52,12 @@ CREATE TABLE `employees` (
   `Role` enum('admin','staff') DEFAULT 'staff'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
+--
+-- Đang đổ dữ liệu cho bảng `employees`
+--
+
+INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `FullName`, `Phone`, `Role`) VALUES
+(1, 'abc', '123123', 'abc', '123', 'staff');
 
 -- --------------------------------------------------------
 
@@ -178,10 +183,6 @@ ALTER TABLE `employees`
   ADD UNIQUE KEY `Username` (`Username`);
 
 --
--- Chỉ mục cho bảng `productcategories`
---
-
---
 -- Chỉ mục cho bảng `products`
 --
 ALTER TABLE `products`
@@ -239,80 +240,7 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT cho bảng `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--
-
---
--- AUTO_INCREMENT cho bảng `products`
---
-ALTER TABLE `products`
-  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `purchaseinvoicedetails`
---
-ALTER TABLE `purchaseinvoicedetails`
-  MODIFY `DetailID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `purchaseinvoices`
---
-ALTER TABLE `purchaseinvoices`
-  MODIFY `PurchaseID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `salesinvoicedetails`
---
-ALTER TABLE `salesinvoicedetails`
-  MODIFY `DetailID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `salesinvoices`
---
-ALTER TABLE `salesinvoices`
-  MODIFY `InvoiceID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `suppliers`
---
-ALTER TABLE `suppliers`
-  MODIFY `SupplierID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Các ràng buộc cho các bảng đã đổ
---
-
-
-
---
--- Các ràng buộc cho bảng `purchaseinvoicedetails`
---
-ALTER TABLE `purchaseinvoicedetails`
-  ADD CONSTRAINT `purchaseinvoicedetails_ibfk_1` FOREIGN KEY (`PurchaseID`) REFERENCES `purchaseinvoices` (`PurchaseID`),
-  ADD CONSTRAINT `purchaseinvoicedetails_ibfk_2` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`);
-
---
--- Các ràng buộc cho bảng `purchaseinvoices`
---
-ALTER TABLE `purchaseinvoices`
-  ADD CONSTRAINT `purchaseinvoices_ibfk_1` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`),
-  ADD CONSTRAINT `purchaseinvoices_ibfk_2` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`);
-
---
--- Các ràng buộc cho bảng `salesinvoicedetails`
---
-ALTER TABLE `salesinvoicedetails`
-  ADD CONSTRAINT `salesinvoicedetails_ibfk_1` FOREIGN KEY (`InvoiceID`) REFERENCES `salesinvoices` (`InvoiceID`),
-  ADD CONSTRAINT `salesinvoicedetails_ibfk_2` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`);
-
---
--- Các ràng buộc cho bảng `salesinvoices`
---
-ALTER TABLE `salesinvoices`
-  ADD CONSTRAINT `salesinvoices_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`),
-  ADD CONSTRAINT `salesinvoices_ibfk_2` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`);
+  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

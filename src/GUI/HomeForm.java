@@ -10,14 +10,14 @@ public class HomeForm extends JFrame {
 
     public HomeForm() {
         setTitle("Trang chính");
-        setSize(900, 600);
+        setSize(1200, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         // Panel menu trái
         JPanel menuPanel = new JPanel();
-        menuPanel.setPreferredSize(new Dimension(150, 600));
+        menuPanel.setPreferredSize(new Dimension(150, 700));
         menuPanel.setLayout(null);
 
         menuPanel.setBorder(BorderFactory.createLineBorder(Color.black));
