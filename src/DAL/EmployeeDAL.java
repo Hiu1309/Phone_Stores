@@ -18,7 +18,7 @@ public class EmployeeDAL {
     }
 
     public EmployeeDTO login(String username, String password) throws SQLException {
-        String sql = "SELECT * FROM Employees WHERE Username = ? AND Password = ?";
+        String sql = "SELECT * FROM employees WHERE Username = ? AND Password = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, username);
         ps.setString(2, password);
@@ -37,7 +37,7 @@ public class EmployeeDAL {
     }
 
     public boolean isUsernameExist(String username) throws SQLException {
-        String sql = "SELECT * FROM Employees WHERE Username = ?";
+        String sql = "SELECT * FROM employees WHERE Username = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, username);
         ResultSet rs = ps.executeQuery();
@@ -45,7 +45,7 @@ public class EmployeeDAL {
     }
 
     public void register(EmployeeDTO emp) throws SQLException {
-        String sql = "INSERT INTO Employees (Username, Password, FullName, Phone, Role) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employees (Username, Password, FullName, Phone, Role) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, emp.getUsername());
         ps.setString(2, emp.getPassword());

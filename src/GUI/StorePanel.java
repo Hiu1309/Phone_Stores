@@ -1,17 +1,23 @@
 package GUI;
 
-import java.awt.Font;
-import java.awt.Image;
-
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
 public class StorePanel extends JPanel{
-    DefaultTableModel model;
+    DefaultTableModel modelSP, modelTT;
     JTextField searchTf;
     JButton searchBtn;
+    JComboBox filterBox;
     public StorePanel(){
         setLayout(null);
+
+        //Panel mục hiện sản phẩm
+        JPanel spPanel = new JPanel();
+        spPanel.setLayout(null);
+        spPanel.setBounds(0,0,740,700);
+        spPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
         //Thanh tiêu đề giao diện bán hàng
         JLabel titlelb = new JLabel("Danh Sách Sản Phẩm");
         titlelb.setFont(new Font("Arial", Font.BOLD, 20));
@@ -22,20 +28,58 @@ public class StorePanel extends JPanel{
         Image scaledImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(scaledImage);
         searchBtn = new JButton(resizedIcon);
-        searchBtn.setBounds(100,30,20,20);
+        searchBtn.setBounds(108,45,22,22);
 
-        //Tạo model cho table chứa sản phẩm
-        model = new DefaultTableModel();
+        //Tạo thanh nhập tìm kiếm  
+        searchTf = new JTextField();
+        searchTf.setBounds(130,45,470,22);
+
+        //Tạo mục checkbox để lọc sản phẩm
+        String cb[] = {"Iphone", "Samsung", "Xiaomi", "Realme", "Huawei", "Vinsmart"};
+        filterBox = new JComboBox(cb);
+        filterBox.setBounds(610,45,80,22);
+
+        //Tạo modelSP cho table chứa sản phẩm
+        modelSP = new DefaultTableModel();
         JTable table = new JTable();
-        table.setModel(model);
-        model.addColumn("STT");
-        model.addColumn("Mã sản phẩm");
-        model.addColumn("Tên sản phẩm");
-        model.addColumn("Hãng");
-        model.addColumn("Giá");
-        model.addColumn("Số lượng");
         JScrollPane sp = new JScrollPane(table);
-        sp.setBounds(10,70,750,400);
-        add(titlelb);add(searchBtn);add(sp);
+        sp.setBounds(10,80,720,570);
+        table.setModel(modelSP);
+        modelSP.addColumn("STT");
+        modelSP.addColumn("Mã điện thoại");
+        modelSP.addColumn("Tên điện thoại");
+        modelSP.addColumn("Hãng");
+        modelSP.addColumn("Giá");
+        modelSP.addColumn("Số lượng");
+
+        //Panel thanh toán
+        JPanel payPanel = new JPanel();
+        payPanel.setLayout(null);
+        payPanel.setBounds(740,0,380,700);
+        payPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        //Title thanh toán
+        JLabel payTitle = new JLabel("Thanh Toán");
+        payTitle.setBounds(95,35,200,50);
+        payTitle.setFont(new Font("Arial", Font.BOLD, 20));
+
+        //Label hiện tên khách hàng khi có 
+
+        //Table hiện thị sản phẩm trong mục thanh toán
+        modelTT = new DefaultTableModel();
+        JTable payTable = new JTable();
+        JScrollPane payScrollPane = new JScrollPane(payTable);
+        payScrollPane.setBounds(10,80,277,300);
+        payTable.setModel(modelTT);
+        modelTT.addColumn("Tên điện thoại");
+        modelTT.addColumn("Giá");
+        modelTT.addColumn("Số lượng");
+
+
+        //Thêm giao diện vào
+        spPanel.add(titlelb);spPanel.add(searchBtn);spPanel.add(searchTf);spPanel.add(filterBox);spPanel.add(sp);
+        payPanel.add(payTitle);
+        payPanel.add(payScrollPane);
+        add(spPanel);add(payPanel);
     }
 }
