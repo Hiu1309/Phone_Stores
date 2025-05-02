@@ -6,9 +6,15 @@ import java.sql.*;
 public class EmployeeDAL {
     private Connection con;
 
-    public EmployeeDAL() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/phone_store", "root", "");
+    public EmployeeDAL(){
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/phone_store", "root", "");
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(ClassNotFoundException ex){
+            ex.printStackTrace();
+        }
     }
 
     public EmployeeDTO login(String username, String password) throws SQLException {
