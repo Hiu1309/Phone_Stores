@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 public class RegisterForm extends JFrame {
     private JTextField usernameField, fullNameField, phoneField;
     private JPasswordField passwordField;
-    private JButton registerButton, backButton;
+    private JButton registerButton;
 
     public RegisterForm() {
         ImageIcon favicon = new ImageIcon("img/newera-logo.png");
@@ -26,10 +26,17 @@ public class RegisterForm extends JFrame {
        
 
         // Left panel (màu xanh lá)
-        JPanel leftPanel = new JPanel();
+        JPanel leftPanel = new JPanel(null);
         leftPanel.setBackground(new Color(59, 228, 119));
         leftPanel.setPreferredSize(new Dimension(180, 550));
         add(leftPanel, BorderLayout.WEST);
+
+        ImageIcon barcode = new ImageIcon("img/barcode.png");
+        Image barcode1 = barcode.getImage().getScaledInstance(200, 900, Image.SCALE_SMOOTH); // điều chỉnh kích thước ở đây
+        ImageIcon barcode2 = new ImageIcon(barcode1);
+        JLabel leftImage = new JLabel(barcode2);
+        leftImage.setBounds(-80, -200, 200, 900); // cập nhật theo kích thước mới
+        leftPanel.add(leftImage);
 
         // Right panel (form đăng ký)
         JPanel rightPanel = new JPanel(null);
@@ -82,6 +89,7 @@ public class RegisterForm extends JFrame {
         registerButton.setBounds(310, 330, 120, 35);
         registerButton.setBackground(new Color(30, 215, 96));
         registerButton.setForeground(Color.black);
+        registerButton.setFocusable(false);
         rightPanel.add(registerButton);
 
         JLabel question = new JLabel("Already have an account?");
@@ -92,7 +100,7 @@ public class RegisterForm extends JFrame {
         JButton loginLink = new JButton("Log in here");
         loginLink.setBounds(260, 378, 120, 28);
         loginLink.setBorderPainted(false);
-        loginLink.setForeground(Color.CYAN);
+        loginLink.setForeground(new Color(35, 169, 242));
         loginLink.setContentAreaFilled(false);
         loginLink.setFocusPainted(false);
         rightPanel.add(loginLink);

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import GUI.StorePanel;
+import GUI.WareHousePanel;
 
 public class HomeForm extends JFrame {
     private JPanel contentPanel;  
@@ -12,8 +13,8 @@ public class HomeForm extends JFrame {
         ImageIcon favicon = new ImageIcon("img/newera-logo.png");
         setIconImage(favicon.getImage());
         setTitle("Trang chính");
-        setSize(1200, 700);
-        setResizable(false);
+        setSize(1240, 790);
+        setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -25,13 +26,17 @@ public class HomeForm extends JFrame {
 
         menuPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         JButton storeBtn = new JButton("Cửa hàng");
-        storeBtn.setBounds(10, 100, 120, 50);
+        storeBtn.setBounds(10, 150, 120, 50);
+        storeBtn.setFocusable(false);
         JButton warehouseBtn = new JButton("Kho");
-        warehouseBtn.setBounds(10, 200, 120, 50);
+        warehouseBtn.setBounds(10, 250, 120, 50);
+        warehouseBtn.setFocusable(false);
         JButton accountBtn = new JButton("Tài khoản");
-        accountBtn.setBounds(10, 300, 120, 50);
+        accountBtn.setBounds(10, 350, 120, 50);
+        accountBtn.setFocusable(false);
         JButton statsBtn = new JButton("Thống kê");
-        statsBtn.setBounds(10, 400, 120, 50);
+        statsBtn.setBounds(10, 450, 120, 50);
+        statsBtn.setFocusable(false);
 
 
         menuPanel.add(storeBtn);
@@ -42,7 +47,7 @@ public class HomeForm extends JFrame {
         // Panel nội dung trung tâm với CardLayout
         contentPanel = new JPanel(new CardLayout());
         contentPanel.add(new StorePanel(), "store");
-        contentPanel.add(new JLabel("Giao diện Kho"), "warehouse");
+        contentPanel.add(new WareHousePanel(), "warehouse");
         contentPanel.add(new JLabel("Giao diện Tài khoản"), "account");
         contentPanel.add(new JLabel("Giao diện Thống kê"), "stats");
 

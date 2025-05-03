@@ -15,7 +15,7 @@ public class StorePanel extends JPanel{
         //Panel mục hiện sản phẩm
         JPanel spPanel = new JPanel();
         spPanel.setLayout(null);
-        spPanel.setBounds(0,0,740,700);
+        spPanel.setBounds(0,0,740,800);
         spPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
         //Thanh tiêu đề giao diện bán hàng
@@ -43,7 +43,7 @@ public class StorePanel extends JPanel{
         modelSP = new DefaultTableModel();
         JTable table = new JTable();
         JScrollPane sp = new JScrollPane(table);
-        sp.setBounds(10,80,720,570);
+        sp.setBounds(10,80,720,680);
         table.setModel(modelSP);
         modelSP.addColumn("STT");
         modelSP.addColumn("Mã điện thoại");
@@ -69,7 +69,7 @@ public class StorePanel extends JPanel{
         modelTT = new DefaultTableModel();
         JTable payTable = new JTable();
         JScrollPane payScrollPane = new JScrollPane(payTable);
-        payScrollPane.setBounds(10,80,277,300);
+        payScrollPane.setBounds(10,80,320,300);
         payTable.setModel(modelTT);
         modelTT.addColumn("Tên điện thoại");
         modelTT.addColumn("Giá");

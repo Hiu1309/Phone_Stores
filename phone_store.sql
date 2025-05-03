@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 02, 2025 lúc 09:20 AM
--- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: May 03, 2025 at 12:06 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `phone_store`
+-- Database: `phone_store`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `customers`
+-- Table structure for table `customers`
 --
 
 CREATE TABLE `customers` (
@@ -40,7 +40,7 @@ CREATE TABLE `customers` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `employees`
+-- Table structure for table `employees`
 --
 
 CREATE TABLE `employees` (
@@ -53,30 +53,36 @@ CREATE TABLE `employees` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `employees`
+-- Dumping data for table `employees`
 --
 
 INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `FullName`, `Phone`, `Role`) VALUES
-(1, 'abc', '123123', 'abc', '123', 'staff');
+(1, 'abc', '123123', 'abc', '123', 'staff'),
+(2, 'd', '123123', 'f', '123', 'staff'),
+(3, 'hason', '123123', 'f', '123', 'staff'),
+(4, 'haha', '123123', 'fg', '123', 'staff');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `products`
+-- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
   `ProductID` int(11) NOT NULL,
-  `ProductName` varchar(100) NOT NULL,
-  `Brand` varchar(50) DEFAULT NULL,
-  `Price` decimal(15,2) NOT NULL,
-  `Stock` int(11) DEFAULT 0
+  `ProductName` varchar(255) NOT NULL,
+  `Type` varchar(100) DEFAULT NULL,
+  `Brand` varchar(100) DEFAULT NULL,
+  `Stock` int(11) DEFAULT 0,
+  `Prices` decimal(10,2) NOT NULL,
+  `Status` enum('Available','Out of Stock') DEFAULT 'Available',
+  `Date` date DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `purchaseinvoicedetails`
+-- Table structure for table `purchaseinvoicedetails`
 --
 
 CREATE TABLE `purchaseinvoicedetails` (
@@ -90,7 +96,7 @@ CREATE TABLE `purchaseinvoicedetails` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `purchaseinvoices`
+-- Table structure for table `purchaseinvoices`
 --
 
 CREATE TABLE `purchaseinvoices` (
@@ -103,7 +109,7 @@ CREATE TABLE `purchaseinvoices` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `salesinvoicedetails`
+-- Table structure for table `salesinvoicedetails`
 --
 
 CREATE TABLE `salesinvoicedetails` (
@@ -117,7 +123,7 @@ CREATE TABLE `salesinvoicedetails` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `salesinvoices`
+-- Table structure for table `salesinvoices`
 --
 
 CREATE TABLE `salesinvoices` (
@@ -130,12 +136,12 @@ CREATE TABLE `salesinvoices` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc đóng vai cho view `salesreport`
+-- Stand-in structure for view `salesreport`
 -- (See below for the actual view)
 --
 CREATE TABLE `salesreport` (
 `CustomerName` varchar(100)
-,`ProductName` varchar(100)
+,`ProductName` varchar(255)
 ,`SaleDate` datetime
 ,`EmployeeName` varchar(100)
 ,`Quantity` int(11)
@@ -146,7 +152,7 @@ CREATE TABLE `salesreport` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `suppliers`
+-- Table structure for table `suppliers`
 --
 
 CREATE TABLE `suppliers` (
@@ -159,37 +165,37 @@ CREATE TABLE `suppliers` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc cho view `salesreport`
+-- Structure for view `salesreport`
 --
 DROP TABLE IF EXISTS `salesreport`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `salesreport`  AS SELECT `c`.`FullName` AS `CustomerName`, `p`.`ProductName` AS `ProductName`, `si`.`SaleDate` AS `SaleDate`, `eid`.`FullName` AS `EmployeeName`, `sid`.`Quantity` AS `Quantity`, `sid`.`UnitPrice` AS `UnitPrice`, `sid`.`Quantity`* `sid`.`UnitPrice` AS `Total` FROM ((((`salesinvoices` `si` join `customers` `c` on(`si`.`CustomerID` = `c`.`CustomerID`)) join `employees` `eid` on(`si`.`EmployeeID` = `eid`.`EmployeeID`)) join `salesinvoicedetails` `sid` on(`si`.`InvoiceID` = `sid`.`InvoiceID`)) join `products` `p` on(`sid`.`ProductID` = `p`.`ProductID`)) ;
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `customers`
+-- Indexes for table `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`CustomerID`);
 
 --
--- Chỉ mục cho bảng `employees`
+-- Indexes for table `employees`
 --
 ALTER TABLE `employees`
   ADD PRIMARY KEY (`EmployeeID`),
   ADD UNIQUE KEY `Username` (`Username`);
 
 --
--- Chỉ mục cho bảng `products`
+-- Indexes for table `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`ProductID`);
 
 --
--- Chỉ mục cho bảng `purchaseinvoicedetails`
+-- Indexes for table `purchaseinvoicedetails`
 --
 ALTER TABLE `purchaseinvoicedetails`
   ADD PRIMARY KEY (`DetailID`),
@@ -197,7 +203,7 @@ ALTER TABLE `purchaseinvoicedetails`
   ADD KEY `ProductID` (`ProductID`);
 
 --
--- Chỉ mục cho bảng `purchaseinvoices`
+-- Indexes for table `purchaseinvoices`
 --
 ALTER TABLE `purchaseinvoices`
   ADD PRIMARY KEY (`PurchaseID`),
@@ -205,7 +211,7 @@ ALTER TABLE `purchaseinvoices`
   ADD KEY `EmployeeID` (`EmployeeID`);
 
 --
--- Chỉ mục cho bảng `salesinvoicedetails`
+-- Indexes for table `salesinvoicedetails`
 --
 ALTER TABLE `salesinvoicedetails`
   ADD PRIMARY KEY (`DetailID`),
@@ -213,7 +219,7 @@ ALTER TABLE `salesinvoicedetails`
   ADD KEY `ProductID` (`ProductID`);
 
 --
--- Chỉ mục cho bảng `salesinvoices`
+-- Indexes for table `salesinvoices`
 --
 ALTER TABLE `salesinvoices`
   ADD PRIMARY KEY (`InvoiceID`),
@@ -221,26 +227,32 @@ ALTER TABLE `salesinvoices`
   ADD KEY `EmployeeID` (`EmployeeID`);
 
 --
--- Chỉ mục cho bảng `suppliers`
+-- Indexes for table `suppliers`
 --
 ALTER TABLE `suppliers`
   ADD PRIMARY KEY (`SupplierID`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `customers`
+-- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
   MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT cho bảng `employees`
+-- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
