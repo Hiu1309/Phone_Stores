@@ -15,7 +15,7 @@ public class StorePanel extends JPanel{
         //Panel mục hiện sản phẩm
         JPanel spPanel = new JPanel();
         spPanel.setLayout(null);
-        spPanel.setBounds(0,0,740,800);
+        spPanel.setBounds(0,0,740,780);
         spPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
         //Thanh tiêu đề giao diện bán hàng
@@ -55,7 +55,7 @@ public class StorePanel extends JPanel{
         //Panel thanh toán
         JPanel payPanel = new JPanel();
         payPanel.setLayout(null);
-        payPanel.setBounds(740,0,380,700);
+        payPanel.setBounds(740,0,380,753);
         payPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
         //Title thanh toán
