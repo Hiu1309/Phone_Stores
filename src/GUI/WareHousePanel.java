@@ -76,11 +76,6 @@ public class WareHousePanel extends JPanel {
             btn.setForeground(Color.WHITE);
             btn.setFont(new Font("SansSerif", Font.BOLD, 14));
             add(btn);
-
-            // Simple actions for demo
-            if (buttonLabels[i].equals("Clear")) {
-                btn.addActionListener(e -> clearFields());
-            }     
         }
 
         setPreferredSize(new Dimension(1080, 800));
@@ -109,15 +104,4 @@ public class WareHousePanel extends JPanel {
         add(cb);
         return cb;
     }
-
-    private void clearFields() {
-        tfProductID.setText("");
-        tfProductName.setText("");
-        tfStock.setText("0");
-        tfPrice.setText("0");
-        cbType.setSelectedIndex(0);
-        cbBrand.setSelectedIndex(0);
-        cbStatus.setSelectedIndex(0);
-        imageLabel.setIcon(null);
-    } 
 }

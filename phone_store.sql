@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2025 at 12:06 PM
+-- Generation Time: May 03, 2025 at 03:48 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -60,7 +60,8 @@ INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `FullName`, `Phon
 (1, 'abc', '123123', 'abc', '123', 'staff'),
 (2, 'd', '123123', 'f', '123', 'staff'),
 (3, 'hason', '123123', 'f', '123', 'staff'),
-(4, 'haha', '123123', 'fg', '123', 'staff');
+(4, 'haha', '123123', 'fg', '123', 'staff'),
+(5, 'h', '123123', 'hieu', '123123', 'staff');
 
 -- --------------------------------------------------------
 
@@ -76,7 +77,8 @@ CREATE TABLE `products` (
   `Stock` int(11) DEFAULT 0,
   `Prices` decimal(10,2) NOT NULL,
   `Status` enum('Available','Out of Stock') DEFAULT 'Available',
-  `Date` date DEFAULT curdate()
+  `Date` date DEFAULT curdate(),
+  `Image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -246,7 +248,7 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `products`
