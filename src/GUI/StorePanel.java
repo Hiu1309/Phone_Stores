@@ -24,7 +24,7 @@ public class StorePanel extends JPanel{
         titlelb.setBounds(280, 0, 250, 50);
 
         //Tạo nút tìm kiếm
-        ImageIcon originalIcon = new ImageIcon("img/search.png");
+        ImageIcon originalIcon = new ImageIcon("img/other/search.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(scaledImage);
         searchBtn = new JButton(resizedIcon);

@@ -14,7 +14,7 @@ public class RegisterForm extends JFrame {
     private JButton registerButton;
 
     public RegisterForm() {
-        ImageIcon favicon = new ImageIcon("img/newera-logo.png");
+        ImageIcon favicon = new ImageIcon("img/other/newera-logo.png");
         setIconImage(favicon.getImage());
         setTitle("Sign up to start shopping");
         setSize(700, 450);
@@ -31,7 +31,7 @@ public class RegisterForm extends JFrame {
         leftPanel.setPreferredSize(new Dimension(180, 550));
         add(leftPanel, BorderLayout.WEST);
 
-        ImageIcon barcode = new ImageIcon("img/barcode.png");
+        ImageIcon barcode = new ImageIcon("img/other/barcode.png");
         Image barcode1 = barcode.getImage().getScaledInstance(200, 900, Image.SCALE_SMOOTH); // điều chỉnh kích thước ở đây
         ImageIcon barcode2 = new ImageIcon(barcode1);
         JLabel leftImage = new JLabel(barcode2);

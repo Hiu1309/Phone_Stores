@@ -124,7 +124,7 @@ table.addMouseListener(new MouseAdapter() {
         int[] xPositions = {885, 133, 287, 445, 599};
         int[] yPositions = {643, 685, 685, 685, 685};
         for (int i = 0; i < buttonLabels.length; i++) {
-            JButton btn = new JButton(buttonLabels[i]);
+            Roundbtn btn = new Roundbtn(buttonLabels[i]);
             btn.setBounds(xPositions[i], yPositions[i], 122, 50);
             btn.setFocusPainted(false);
             btn.setBackground(new Color(57, 219, 114));

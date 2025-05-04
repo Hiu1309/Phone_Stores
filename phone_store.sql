@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 04, 2025 at 08:12 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.1.25
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th5 04, 2025 lúc 08:53 AM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `phone_store`
+-- Cơ sở dữ liệu: `phone_store`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customers`
+-- Cấu trúc bảng cho bảng `customers`
 --
 
 CREATE TABLE `customers` (
@@ -40,33 +40,27 @@ CREATE TABLE `customers` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `employees`
+-- Cấu trúc bảng cho bảng `employees`
 --
 
 CREATE TABLE `employees` (
   `EmployeeID` int(11) NOT NULL,
   `Username` varchar(50) NOT NULL,
   `Password` varchar(255) NOT NULL,
-  `FullName` varchar(100) DEFAULT NULL,
-  `Phone` varchar(20) DEFAULT NULL,
-  `Role` enum('admin','staff') DEFAULT 'staff'
+  `Phone` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `employees`
+-- Đang đổ dữ liệu cho bảng `employees`
 --
 
-INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `FullName`, `Phone`, `Role`) VALUES
-(1, 'abc', '123123', 'abc', '123', 'staff'),
-(2, 'd', '123123', 'f', '123', 'staff'),
-(3, 'hason', '123123', 'f', '123', 'staff'),
-(4, 'haha', '123123', 'fg', '123', 'staff'),
-(5, 'h', '123123', 'hieu', '123123', 'staff');
+INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `Phone`) VALUES
+(1, 'hiu', '123123123', '1231231231');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Cấu trúc bảng cho bảng `products`
 --
 
 CREATE TABLE `products` (
@@ -82,7 +76,7 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `products`
+-- Đang đổ dữ liệu cho bảng `products`
 --
 
 INSERT INTO `products` (`ProductID`, `ProductName`, `Type`, `Brand`, `Stock`, `Status`, `Prices`, `Date`, `Image`) VALUES
@@ -92,7 +86,7 @@ INSERT INTO `products` (`ProductID`, `ProductName`, `Type`, `Brand`, `Stock`, `S
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchaseinvoicedetails`
+-- Cấu trúc bảng cho bảng `purchaseinvoicedetails`
 --
 
 CREATE TABLE `purchaseinvoicedetails` (
@@ -106,7 +100,7 @@ CREATE TABLE `purchaseinvoicedetails` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchaseinvoices`
+-- Cấu trúc bảng cho bảng `purchaseinvoices`
 --
 
 CREATE TABLE `purchaseinvoices` (
@@ -119,7 +113,7 @@ CREATE TABLE `purchaseinvoices` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `salesinvoicedetails`
+-- Cấu trúc bảng cho bảng `salesinvoicedetails`
 --
 
 CREATE TABLE `salesinvoicedetails` (
@@ -133,7 +127,7 @@ CREATE TABLE `salesinvoicedetails` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `salesinvoices`
+-- Cấu trúc bảng cho bảng `salesinvoices`
 --
 
 CREATE TABLE `salesinvoices` (
@@ -146,23 +140,7 @@ CREATE TABLE `salesinvoices` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `salesreport`
--- (See below for the actual view)
---
-CREATE TABLE `salesreport` (
-`CustomerName` varchar(100)
-,`ProductName` varchar(255)
-,`SaleDate` datetime
-,`EmployeeName` varchar(100)
-,`Quantity` int(11)
-,`UnitPrice` decimal(15,2)
-,`Total` decimal(25,2)
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `suppliers`
+-- Cấu trúc bảng cho bảng `suppliers`
 --
 
 CREATE TABLE `suppliers` (
@@ -172,40 +150,30 @@ CREATE TABLE `suppliers` (
   `Address` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Structure for view `salesreport`
---
-DROP TABLE IF EXISTS `salesreport`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `salesreport`  AS SELECT `c`.`FullName` AS `CustomerName`, `p`.`ProductName` AS `ProductName`, `si`.`SaleDate` AS `SaleDate`, `eid`.`FullName` AS `EmployeeName`, `sid`.`Quantity` AS `Quantity`, `sid`.`UnitPrice` AS `UnitPrice`, `sid`.`Quantity`* `sid`.`UnitPrice` AS `Total` FROM ((((`salesinvoices` `si` join `customers` `c` on(`si`.`CustomerID` = `c`.`CustomerID`)) join `employees` `eid` on(`si`.`EmployeeID` = `eid`.`EmployeeID`)) join `salesinvoicedetails` `sid` on(`si`.`InvoiceID` = `sid`.`InvoiceID`)) join `products` `p` on(`sid`.`ProductID` = `p`.`ProductID`)) ;
-
---
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `customers`
+-- Chỉ mục cho bảng `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`CustomerID`);
 
 --
--- Indexes for table `employees`
+-- Chỉ mục cho bảng `employees`
 --
 ALTER TABLE `employees`
-  ADD PRIMARY KEY (`EmployeeID`),
-  ADD UNIQUE KEY `Username` (`Username`);
+  ADD PRIMARY KEY (`EmployeeID`);
 
 --
--- Indexes for table `products`
+-- Chỉ mục cho bảng `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`ProductID`);
 
 --
--- Indexes for table `purchaseinvoicedetails`
+-- Chỉ mục cho bảng `purchaseinvoicedetails`
 --
 ALTER TABLE `purchaseinvoicedetails`
   ADD PRIMARY KEY (`DetailID`),
@@ -213,7 +181,7 @@ ALTER TABLE `purchaseinvoicedetails`
   ADD KEY `ProductID` (`ProductID`);
 
 --
--- Indexes for table `purchaseinvoices`
+-- Chỉ mục cho bảng `purchaseinvoices`
 --
 ALTER TABLE `purchaseinvoices`
   ADD PRIMARY KEY (`PurchaseID`),
@@ -221,7 +189,7 @@ ALTER TABLE `purchaseinvoices`
   ADD KEY `EmployeeID` (`EmployeeID`);
 
 --
--- Indexes for table `salesinvoicedetails`
+-- Chỉ mục cho bảng `salesinvoicedetails`
 --
 ALTER TABLE `salesinvoicedetails`
   ADD PRIMARY KEY (`DetailID`),
@@ -229,7 +197,7 @@ ALTER TABLE `salesinvoicedetails`
   ADD KEY `ProductID` (`ProductID`);
 
 --
--- Indexes for table `salesinvoices`
+-- Chỉ mục cho bảng `salesinvoices`
 --
 ALTER TABLE `salesinvoices`
   ADD PRIMARY KEY (`InvoiceID`),
@@ -237,32 +205,64 @@ ALTER TABLE `salesinvoices`
   ADD KEY `EmployeeID` (`EmployeeID`);
 
 --
--- Indexes for table `suppliers`
+-- Chỉ mục cho bảng `suppliers`
 --
 ALTER TABLE `suppliers`
   ADD PRIMARY KEY (`SupplierID`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `customers`
+-- AUTO_INCREMENT cho bảng `customers`
 --
 ALTER TABLE `customers`
   MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `employees`
+-- AUTO_INCREMENT cho bảng `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `products`
+-- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
   MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21313;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `purchaseinvoicedetails`
+--
+ALTER TABLE `purchaseinvoicedetails`
+  ADD CONSTRAINT `fk_purchaseinvoicedetails_product` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_purchaseinvoicedetails_purchase` FOREIGN KEY (`PurchaseID`) REFERENCES `purchaseinvoices` (`PurchaseID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `purchaseinvoices`
+--
+ALTER TABLE `purchaseinvoices`
+  ADD CONSTRAINT `fk_purchaseinvoices_employee` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_purchaseinvoices_supplier` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `salesinvoicedetails`
+--
+ALTER TABLE `salesinvoicedetails`
+  ADD CONSTRAINT `fk_salesinvoicedetails_invoice` FOREIGN KEY (`InvoiceID`) REFERENCES `salesinvoices` (`InvoiceID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_salesinvoicedetails_product` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `salesinvoices`
+--
+ALTER TABLE `salesinvoices`
+  ADD CONSTRAINT `fk_salesinvoices_customer` FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_salesinvoices_employee` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

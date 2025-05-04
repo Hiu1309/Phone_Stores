@@ -21,11 +21,11 @@ public class LoginForm extends JFrame {
         setLayout(null);
         getContentPane().setBackground(new Color(29, 29, 29));
 
-        ImageIcon favicon = new ImageIcon("img/newera-logo.png");
+        ImageIcon favicon = new ImageIcon("img/other/newera-logo.png");
         setIconImage(favicon.getImage());
 
         // Left-side image
-        ImageIcon icon = new ImageIcon("img/newera-icon.png");
+        ImageIcon icon = new ImageIcon("img/other/newera-icon.png");
         Image icon1 = icon.getImage().getScaledInstance(300, 100, Image.SCALE_SMOOTH); 
         ImageIcon icon2 = new ImageIcon(icon1);
         JLabel leftImage = new JLabel(icon2);
@@ -41,7 +41,7 @@ public class LoginForm extends JFrame {
         add(rightPanel);
 
         // Logo
-        ImageIcon logo = new ImageIcon("img/newera-logo.png");
+        ImageIcon logo = new ImageIcon("img/other/newera-logo.png");
         Image logo1 = logo.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         ImageIcon logo2 = new ImageIcon(logo1);
         JLabel logoLabel = new JLabel(logo2);
