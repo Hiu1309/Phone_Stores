@@ -1,22 +1,32 @@
 package GUI;
 
 import java.awt.*;
+import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.table.*;
 import java.util.Vector;
+import java.math.BigDecimal;
 
-import BLL.EmployeeBLL;
-import DTO.EmployeeDTO;
+import BLL.*;
+import DTO.*;
 
 public class StorePanel extends JPanel{
-    EmployeeBLL emplBLL = new EmployeeBLL();
-    DefaultTableModel modelSP, modelTT;
+    ProductsBLL productsBLL = new ProductsBLL();
+    DefaultTableModel modelTT;
     JTextField searchTf, phoneTf, tongTf, nhanTf, thoiTf;
     JButton searchBtn, thanhToanBtn, inBillBtn;
     JComboBox filterBox;
     JLabel nameLabel;
+    JTable spTable;
 
     public StorePanel(){
+        initComponents();
+        loadProductList();
+       
+    }
+
+    public void initComponents(){
         setLayout(null);
 
         //Panel mục hiện sản phẩm
@@ -36,6 +46,11 @@ public class StorePanel extends JPanel{
         ImageIcon resizedIcon = new ImageIcon(scaledImage);
         searchBtn = new JButton(resizedIcon);
         searchBtn.setBounds(108,45,22,22);
+        searchBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                searchAndFilterAction(e);
+            }
+        });
 
         //Tạo thanh nhập tìm kiếm  
         searchTf = new JTextField();
@@ -45,27 +60,16 @@ public class StorePanel extends JPanel{
         String cb[] = {"Tất cả", "Iphone", "Samsung", "Xiaomi", "Realme", "Huawei", "Vinsmart"};
         filterBox = new JComboBox(cb);
         filterBox.setBounds(610,45,80,22);
+        filterBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                searchAndFilterAction(e);
+            }
+        });
 
-        //Tạo modelSP cho table chứa sản phẩm
-        modelSP = new DefaultTableModel();
-        JTable table = new JTable();
-        JScrollPane sp = new JScrollPane(table);
+        //Taọ bảng sản phẩm
+        spTable = new JTable();
+        JScrollPane sp = new JScrollPane(spTable);
         sp.setBounds(10,80,720,570);
-        table.setModel(modelSP);
-        modelSP.addColumn("STT");
-        modelSP.addColumn("Mã điện thoại");
-        modelSP.addColumn("Tên điện thoại");
-        modelSP.addColumn("Hãng");
-        modelSP.addColumn("Giá");
-        modelSP.addColumn("Số lượng");
-
-        // Vector<EmployeeDTO> arr = emplBLL.getAllEmployees();
-        // for(int i=0;i<arr.size();i++){
-        //     EmployeeDTO x = arr.get(i);
-        //     int id = x.getEmployeeID();
-        //     String username = x.getUsername();
-        //     String phone =
-        // }
 
         //Panel thanh toán
         JPanel payPanel = new JPanel();
@@ -125,4 +129,68 @@ public class StorePanel extends JPanel{
         payPanel.add(thanhToanBtn);payPanel.add(inBillBtn);
         add(spPanel);add(payPanel);
     }
+
+    public void loadProductList(){
+         //Tạo modelSP cho table chứa sản phẩm
+         DefaultTableModel modelSP = new DefaultTableModel();;
+         modelSP.addColumn("Mã điện thoại");
+         modelSP.addColumn("Tên điện thoại");
+         modelSP.addColumn("Hãng");
+         modelSP.addColumn("Giá");
+         modelSP.addColumn("Số lượng");
+         spTable.setModel(modelSP);
+ 
+         Vector<ProductsDTO> arr = new Vector<ProductsDTO>();
+         arr = productsBLL.getAllProducts();
+         for(int i=0;i<arr.size();i++){
+             ProductsDTO p = arr.get(i);
+             int ma = p.getProductID();
+             String ten = p.getProductName();
+             String hang = p.getBrand();
+             BigDecimal gia = p.getPrices();
+             int soLuong = p.getStock();
+             Object[] row = {ma, ten, hang, gia, soLuong};
+             modelSP.addRow(row);
+        }
+    }
+
+    public void searchAndFilterAction(ActionEvent e){
+        String searchStr = searchTf.getText().trim().toLowerCase();
+        String filterStr = filterBox.getSelectedItem().toString();
+        Vector<ProductsDTO> arr = new Vector<ProductsDTO>();
+        arr = productsBLL.getAllProducts();
+
+        DefaultTableModel modelSp = new DefaultTableModel();
+        modelSp.addColumn("Mã điện thoại");
+        modelSp.addColumn("Tên điện thoại");
+        modelSp.addColumn("Hãng");
+        modelSp.addColumn("Giá");
+        modelSp.addColumn("Số lượng");
+
+        for(int i=0;i<arr.size();i++){
+            ProductsDTO p = arr.get(i);
+            String productName = p.getProductName().toLowerCase();
+            String productBrand = p.getBrand();
+            boolean matchSearch = false;
+            boolean matchFilter = false;
+
+            if(searchStr.equals("")||productName.contains(searchStr)){
+                matchSearch = true;
+            }
+            if(filterStr.equals("Tất cả")||productBrand.equals(filterStr)){
+                matchFilter = true;
+            }
+            if(matchSearch&&matchFilter){
+                int ma = p.getProductID();
+                String ten = p.getProductName();
+                String hang = p.getBrand();
+                BigDecimal gia = p.getPrices();
+                int soLuong = p.getStock();
+                Object[] row = {ma, ten, hang, gia, soLuong};
+                modelSp.addRow(row);
+            }
+        }
+        spTable.setModel(modelSp);
+    }
+
 }

@@ -3,7 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import GUI.StorePanel;
+import GUI.*;
 
 public class HomeForm extends JFrame {
     private JPanel contentPanel;  
@@ -30,17 +30,27 @@ public class HomeForm extends JFrame {
         JButton statsBtn = new JButton("Thống kê");
         statsBtn.setBounds(10, 400, 120, 50);
 
+        JButton exitBtn = new JButton("Thoát");
+        exitBtn.setBounds(60,600,70,30);
+        exitBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                JOptionPane.showMessageDialog(HomeForm.this, "Thoát về màn hình đăng nhập");
+                dispose();
+                new LoginForm().setVisible(true);
+            }
+        });
 
         menuPanel.add(storeBtn);
         menuPanel.add(warehouseBtn);
         menuPanel.add(accountBtn);
         menuPanel.add(statsBtn);
+        menuPanel.add(exitBtn);
 
         // Panel nội dung trung tâm với CardLayout
         contentPanel = new JPanel(new CardLayout());
         contentPanel.add(new StorePanel(), "store");
         contentPanel.add(new JLabel("Giao diện Kho"), "warehouse");
-        contentPanel.add(new JLabel("Giao diện Tài khoản"), "account");
+        contentPanel.add(new AccountForm(), "account");
         contentPanel.add(new JLabel("Giao diện Thống kê"), "stats");
 
         // Sự kiện nút chuyển panel

@@ -65,14 +65,19 @@ public class LoginForm extends JFrame {
 
     private void loginAction(ActionEvent e){
         try{
-            if(usernameField.getText().trim().equals("")||passwordField.getPassword().toString().trim().equals("")){
+            String username = usernameField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+            if(username.equals("")||password.equals("")){
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin");
             }else{                
-                String result = empl.login(usernameField.getText(), new String(passwordField.getPassword()));
-                JOptionPane.showMessageDialog(this, result);
+                String result = empl.login(username, password);                
                 if(result.equals("Đăng nhập thành công!")){
+                    JOptionPane.showMessageDialog(this, result +" \nChào nhân viên "+username);
                     dispose();
                     new HomeForm().setVisible(true);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, result);
                 }
             }
         }catch(NumberFormatException ex){
