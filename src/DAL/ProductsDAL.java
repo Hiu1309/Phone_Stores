@@ -31,7 +31,7 @@ public class ProductsDAL {
                 p.setPrices(rs.getBigDecimal("Prices"));
                 p.setStatus(rs.getString("Status"));
                 p.setDate(rs.getDate("Date"));
-                p.setImages(rs.getString("Images"));
+                p.setImages(rs.getString("Image"));
                 list.add(p);
             }
         } catch (SQLException e) {
@@ -41,7 +41,7 @@ public class ProductsDAL {
     }
 
     public boolean insertProduct(ProductsDTO p) {
-        String sql = "INSERT INTO products (ProductID, ProductName, Type, Brand, Stock, Prices, Status, Date, Images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO products (ProductID, ProductName, Type, Brand, Stock, Prices, Status, Date, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, p.getProductID());
             ps.setString(2, p.getProductName());
@@ -70,4 +70,36 @@ public class ProductsDAL {
         }
         return false;
     }
+    public boolean updateProduct(ProductsDTO p) {
+        String sql = "UPDATE products SET ProductName = ?, Type = ?, Brand = ?, Stock = ?, Prices = ?, Status = ?, Date = ?, Image = ? WHERE ProductID = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, p.getProductName());
+            ps.setString(2, p.getType());
+            ps.setString(3, p.getBrand());
+            ps.setInt(4, p.getStock());
+            ps.setBigDecimal(5, p.getPrices());
+            ps.setString(6, p.getStatus());
+            ps.setDate(7, p.getDate());
+            ps.setString(8, p.getImages());
+            ps.setInt(9, p.getProductID());
+    
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    
+    public boolean deleteProduct(int productID) {
+        String sql = "DELETE FROM products WHERE ProductID = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, productID);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
 }

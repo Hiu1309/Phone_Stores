@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2025 at 03:48 PM
+-- Generation Time: May 04, 2025 at 08:12 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -75,11 +75,19 @@ CREATE TABLE `products` (
   `Type` varchar(100) DEFAULT NULL,
   `Brand` varchar(100) DEFAULT NULL,
   `Stock` int(11) DEFAULT 0,
-  `Prices` decimal(10,2) NOT NULL,
-  `Status` enum('Available','Out of Stock') DEFAULT 'Available',
+  `Status` varchar(255) DEFAULT NULL,
+  `Prices` decimal(14,2) NOT NULL,
   `Date` date DEFAULT curdate(),
   `Image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`ProductID`, `ProductName`, `Type`, `Brand`, `Stock`, `Status`, `Prices`, `Date`, `Image`) VALUES
+(1, 'hi', 'Ios', 'Iphone', 123, 'Còn Hàng', 12323223.00, '2025-05-03', 'C:\\Users\\HELIOS 300\\OneDrive\\ドキュメント\\GitHub\\Web_ban_game\\admin\\assets\\icon\\MT3H.png'),
+(2, 'fffsdfs', 'Android', 'Realme', 123, 'Hết Hàng', 5323223.00, '2025-05-04', 'C:\\Users\\HELIOS 300\\OneDrive\\ドキュメント\\GitHub\\Web_ban_game\\admin\\assets\\icon\\MT3H.png');
 
 -- --------------------------------------------------------
 
@@ -254,7 +262,7 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21313;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

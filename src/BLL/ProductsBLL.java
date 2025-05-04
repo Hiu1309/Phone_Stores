@@ -10,6 +10,16 @@ public class ProductsBLL {
     public ProductsBLL() {
         dal = new ProductsDAL();
     }
+    public String deleteProduct(int productID) {
+        boolean success = dal.deleteProduct(productID);
+        return success ? "Xóa sản phẩm thành công!" : "Xóa sản phẩm thất bại!";
+    }
+    
+    public String updateProduct(ProductsDTO p) {
+        boolean success = dal.updateProduct(p);
+        return success ? "Cập nhật sản phẩm thành công!" : "Cập nhật sản phẩm thất bại!";
+    }
+    
 
     public ArrayList<ProductsDTO> getAllProducts() {
         return dal.getAllProducts();
@@ -17,7 +27,7 @@ public class ProductsBLL {
 
     public String addProduct(ProductsDTO p) {
         if (dal.isProductIDExists(p.getProductID())) {
-            return "Mã sản phẩm đã tồn tại!";
+            return "Sản phẩm đã tồn tại!";
         }
 
         boolean success = dal.insertProduct(p);
