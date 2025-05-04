@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 02, 2025 lúc 09:20 AM
+-- Thời gian đã tạo: Th5 04, 2025 lúc 09:06 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -47,17 +47,15 @@ CREATE TABLE `employees` (
   `EmployeeID` int(11) NOT NULL,
   `Username` varchar(50) NOT NULL,
   `Password` varchar(255) NOT NULL,
-  `FullName` varchar(100) DEFAULT NULL,
-  `Phone` varchar(20) DEFAULT NULL,
-  `Role` enum('admin','staff') DEFAULT 'staff'
+  `Phone` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `employees`
 --
 
-INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `FullName`, `Phone`, `Role`) VALUES
-(1, 'abc', '123123', 'abc', '123', 'staff');
+INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `Phone`) VALUES
+(1, 'hiu', '123123123', '1231231231');
 
 -- --------------------------------------------------------
 
@@ -67,11 +65,23 @@ INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `FullName`, `Phon
 
 CREATE TABLE `products` (
   `ProductID` int(11) NOT NULL,
-  `ProductName` varchar(100) NOT NULL,
-  `Brand` varchar(50) DEFAULT NULL,
-  `Price` decimal(15,2) NOT NULL,
-  `Stock` int(11) DEFAULT 0
+  `ProductName` varchar(255) NOT NULL,
+  `Type` varchar(100) DEFAULT NULL,
+  `Brand` varchar(100) DEFAULT NULL,
+  `Stock` int(11) DEFAULT 0,
+  `Status` varchar(255) DEFAULT NULL,
+  `Prices` decimal(14,2) NOT NULL,
+  `Date` date DEFAULT curdate(),
+  `Image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `products`
+--
+
+INSERT INTO `products` (`ProductID`, `ProductName`, `Type`, `Brand`, `Stock`, `Status`, `Prices`, `Date`, `Image`) VALUES
+(1, 'hi', 'Ios', 'Iphone', 123, 'Còn Hàng', 12323223.00, '2025-05-03', 'C:\\Users\\HELIOS 300\\OneDrive\\ドキュメント\\GitHub\\Web_ban_game\\admin\\assets\\icon\\MT3H.png'),
+(2, 'fffsdfs', 'Android', 'Realme', 123, 'Hết Hàng', 5323223.00, '2025-05-04', 'C:\\Users\\HELIOS 300\\OneDrive\\ドキュメント\\GitHub\\Web_ban_game\\admin\\assets\\icon\\MT3H.png');
 
 -- --------------------------------------------------------
 
@@ -130,22 +140,6 @@ CREATE TABLE `salesinvoices` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc đóng vai cho view `salesreport`
--- (See below for the actual view)
---
-CREATE TABLE `salesreport` (
-`CustomerName` varchar(100)
-,`ProductName` varchar(100)
-,`SaleDate` datetime
-,`EmployeeName` varchar(100)
-,`Quantity` int(11)
-,`UnitPrice` decimal(15,2)
-,`Total` decimal(25,2)
-);
-
--- --------------------------------------------------------
-
---
 -- Cấu trúc bảng cho bảng `suppliers`
 --
 
@@ -155,15 +149,6 @@ CREATE TABLE `suppliers` (
   `Phone` varchar(20) DEFAULT NULL,
   `Address` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Cấu trúc cho view `salesreport`
---
-DROP TABLE IF EXISTS `salesreport`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `salesreport`  AS SELECT `c`.`FullName` AS `CustomerName`, `p`.`ProductName` AS `ProductName`, `si`.`SaleDate` AS `SaleDate`, `eid`.`FullName` AS `EmployeeName`, `sid`.`Quantity` AS `Quantity`, `sid`.`UnitPrice` AS `UnitPrice`, `sid`.`Quantity`* `sid`.`UnitPrice` AS `Total` FROM ((((`salesinvoices` `si` join `customers` `c` on(`si`.`CustomerID` = `c`.`CustomerID`)) join `employees` `eid` on(`si`.`EmployeeID` = `eid`.`EmployeeID`)) join `salesinvoicedetails` `sid` on(`si`.`InvoiceID` = `sid`.`InvoiceID`)) join `products` `p` on(`sid`.`ProductID` = `p`.`ProductID`)) ;
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -179,8 +164,7 @@ ALTER TABLE `customers`
 -- Chỉ mục cho bảng `employees`
 --
 ALTER TABLE `employees`
-  ADD PRIMARY KEY (`EmployeeID`),
-  ADD UNIQUE KEY `Username` (`Username`);
+  ADD PRIMARY KEY (`EmployeeID`);
 
 --
 -- Chỉ mục cho bảng `products`
@@ -241,6 +225,44 @@ ALTER TABLE `customers`
 --
 ALTER TABLE `employees`
   MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT cho bảng `products`
+--
+ALTER TABLE `products`
+  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21313;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `purchaseinvoicedetails`
+--
+ALTER TABLE `purchaseinvoicedetails`
+  ADD CONSTRAINT `fk_purchaseinvoicedetails_product` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_purchaseinvoicedetails_purchase` FOREIGN KEY (`PurchaseID`) REFERENCES `purchaseinvoices` (`PurchaseID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `purchaseinvoices`
+--
+ALTER TABLE `purchaseinvoices`
+  ADD CONSTRAINT `fk_purchaseinvoices_employee` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_purchaseinvoices_supplier` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `salesinvoicedetails`
+--
+ALTER TABLE `salesinvoicedetails`
+  ADD CONSTRAINT `fk_salesinvoicedetails_invoice` FOREIGN KEY (`InvoiceID`) REFERENCES `salesinvoices` (`InvoiceID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_salesinvoicedetails_product` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `salesinvoices`
+--
+ALTER TABLE `salesinvoices`
+  ADD CONSTRAINT `fk_salesinvoices_customer` FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_salesinvoices_employee` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

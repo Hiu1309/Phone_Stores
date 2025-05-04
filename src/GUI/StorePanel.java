@@ -3,11 +3,16 @@ package GUI;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import java.util.Vector;
+
+import BLL.EmployeeBLL;
+import DTO.EmployeeDTO;
 
 public class StorePanel extends JPanel{
+    EmployeeBLL emplBLL = new EmployeeBLL();
     DefaultTableModel modelSP, modelTT;
     JTextField searchTf, phoneTf, tongTf, nhanTf, thoiTf;
-    JButton searchBtn, thanhToanBtn, InBillBtn;
+    JButton searchBtn, thanhToanBtn, inBillBtn;
     JComboBox filterBox;
     JLabel nameLabel;
 
@@ -37,7 +42,7 @@ public class StorePanel extends JPanel{
         searchTf.setBounds(130,45,470,22);
 
         //Tạo mục checkbox để lọc sản phẩm
-        String cb[] = {"Iphone", "Samsung", "Xiaomi", "Realme", "Huawei", "Vinsmart"};
+        String cb[] = {"Tất cả", "Iphone", "Samsung", "Xiaomi", "Realme", "Huawei", "Vinsmart"};
         filterBox = new JComboBox(cb);
         filterBox.setBounds(610,45,80,22);
 
@@ -53,6 +58,14 @@ public class StorePanel extends JPanel{
         modelSP.addColumn("Hãng");
         modelSP.addColumn("Giá");
         modelSP.addColumn("Số lượng");
+
+        // Vector<EmployeeDTO> arr = emplBLL.getAllEmployees();
+        // for(int i=0;i<arr.size();i++){
+        //     EmployeeDTO x = arr.get(i);
+        //     int id = x.getEmployeeID();
+        //     String username = x.getUsername();
+        //     String phone =
+        // }
 
         //Panel thanh toán
         JPanel payPanel = new JPanel();
@@ -89,17 +102,27 @@ public class StorePanel extends JPanel{
         thoiTf.setEditable(false);
 
         thanhToanBtn = new JButton("Thanh Toán");
-        InBillBtn = new JButton("In bill");
+        inBillBtn = new JButton("In bill");
         
-        phoneLabel.setBounds(20,400,150,20);
-        phoneTf.setBounds(85,402,150,20);
-        nameLabel.setBounds(70,430,150,20);
+        nameLabel.setBounds(50,400,150,20);
 
+        phoneLabel.setBounds(50,430,80,20);
+        phoneTf.setBounds(125,432,100,20);
+        tongLabel.setBounds(50,460,80,20);
+        tongTf.setBounds(125,462,100,20);
+        nhanLabel.setBounds(50,490,80,20);
+        nhanTf.setBounds(125,492,100,20);
+        thoiLabel.setBounds(50,520,80,20);
+        thoiTf.setBounds(125,522,100,20);
 
+        thanhToanBtn.setBounds(40,570,105,30);
+        inBillBtn.setBounds(175,570,105,30);
 
         //Thêm giao diện vào
         spPanel.add(titlelb);spPanel.add(searchBtn);spPanel.add(searchTf);spPanel.add(filterBox);spPanel.add(sp);
         payPanel.add(payTitle);payPanel.add(nameLabel);payPanel.add(payScrollPane);payPanel.add(phoneLabel);payPanel.add(phoneTf);
+        payPanel.add(tongLabel);payPanel.add(tongTf);payPanel.add(nhanLabel);payPanel.add(nhanTf);payPanel.add(thoiLabel);payPanel.add(thoiTf);
+        payPanel.add(thanhToanBtn);payPanel.add(inBillBtn);
         add(spPanel);add(payPanel);
     }
 }

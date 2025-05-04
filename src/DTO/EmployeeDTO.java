@@ -4,11 +4,8 @@ public class EmployeeDTO {
     private int employeeID;
     private String username;
     private String password;
-    private String fullName;
     private String phone;
-    private String role;
 
-    // Getters and Setters
     public int getEmployeeID() { 
         return employeeID; 
     }
@@ -27,16 +24,9 @@ public class EmployeeDTO {
     public String getPassword() {
          return password; 
     }
+
     public void setPassword(String password) {
          this.password = password; 
-    }
-
-    public String getFullName() {
-         return fullName; 
-    }
-
-    public void setFullName(String fullName) {
-         this.fullName = fullName; 
     }
 
     public String getPhone() {
@@ -47,11 +37,4 @@ public class EmployeeDTO {
         this.phone = phone; 
     }
 
-    public String getRole() { 
-        return role; 
-    }
-
-    public void setRole(String role) {
-         this.role = role; 
-    }
 } 

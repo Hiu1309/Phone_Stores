@@ -2,23 +2,27 @@ package BLL;
 
 import DAL.EmployeeDAL;
 import DTO.EmployeeDTO;
+import java.util.Vector;
 
 public class EmployeeBLL {
-    private EmployeeDAL dal;
-
-    public EmployeeBLL() throws Exception {
-        dal = new EmployeeDAL();
+    EmployeeDAL emplDAL = new EmployeeDAL();
+    public Vector<EmployeeDTO> getAllEmployees(){
+        return emplDAL.getAllEmployees();
     }
 
-    public EmployeeDTO login(String username, String password) throws Exception {
-        return dal.login(username, password);
+    public String login(String username, String password){
+        if(emplDAL.login(username, password))
+        return "Đăng nhập thành công!";
+        return "Sai tên tài khoản hoặc mật khẩu";
     }
 
-    public boolean isUsernameExist(String username) throws Exception {
-        return dal.isUsernameExist(username);
-    }
-
-    public void register(EmployeeDTO emp) throws Exception {
-        dal.register(emp);
+    public String addEmployee(EmployeeDTO empl){
+        if(emplDAL.isUsernameExist(empl.getUsername())){
+            return "Tài khoản này đã tồn tại";
+        }
+        if(emplDAL.addEmployee(empl)){
+            return "Đăng ký thành công";
+        }
+        return "Thêm thất bại";
     }
 }
