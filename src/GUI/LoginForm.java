@@ -12,9 +12,13 @@ public class LoginForm extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton, registerButton;
-    EmployeeBLL empl = new EmployeeBLL();
+    private EmployeeBLL empl = new EmployeeBLL();
 
     public LoginForm() {
+        initComponents();
+    }
+
+    private void initComponents(){
         setTitle("Đăng nhập");
         setSize(300, 230);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -67,23 +71,23 @@ public class LoginForm extends JFrame {
         try{
             String username = usernameField.getText().trim();
             String password = new String(passwordField.getPassword()).trim();
-            if(username.equals("")||password.equals("")){
+    
+            if(username.equals("") || password.equals("")){
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin");
-            }else{                
-                String result = empl.login(username, password);                
-                if(result.equals("Đăng nhập thành công!")){
-                    JOptionPane.showMessageDialog(this, result +" \nChào nhân viên "+username);
+            } else {
+                EmployeeDTO emp = empl.getEmployeeAfterLogin(username, password);
+                if(emp != null){
+                    JOptionPane.showMessageDialog(this, "Đăng nhập thành công!\nChào nhân viên: " + emp.getUsername());
                     dispose();
-                    new HomeForm().setVisible(true);
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, result);
+                    new HomeForm(emp).setVisible(true); 
+                } else {
+                    JOptionPane.showMessageDialog(this, "Sai tên tài khoản hoặc mật khẩu");
                 }
             }
-        }catch(NumberFormatException ex){
-            System.out.println("Thông tin không hợp lệ: "+ex.getMessage());
+        } catch(Exception ex){
+            System.out.println("Lỗi khi đăng nhập: " + ex.getMessage());
         }
-
     }
+    
 
 }

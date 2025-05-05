@@ -31,46 +31,6 @@ public class EmployeeDAL {
         return arr;
     }
 
-    public boolean register(EmployeeDTO empl){
-        boolean result = false;
-        Connection con = DBConnection.openConnect();
-        try{
-            String sql = "INSERT INTO employees(Username, Password, Phone) VALUES(?,?,?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, empl.getUsername());
-            ps.setString(2,empl.getPassword());
-            ps.setString(3, empl.getPhone());
-            if(ps.executeUpdate()>=1){
-                result = true;
-            }
-        }catch(SQLException ex){
-            System.out.println("Lỗi cơ sở dữ liệu "+ex.getMessage());
-        }finally{
-            DBConnection.closeConnect(con);
-        }
-        return result;
-    }
-
-    public boolean login(String username, String password){
-        boolean result = false;
-        Connection con = DBConnection.openConnect();
-        try{
-            String sql = "SELECT Username, Password FROM employees WHERE Username = ? AND Password = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1,username);
-            ps.setString(2,password);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                result = true;
-            }
-        }catch(SQLException ex){
-            System.out.println("Lỗi cơ sở dữ liệu "+ex.getMessage());
-        }finally{
-            DBConnection.closeConnect(con);
-        }
-        return result;
-    }
-
     public boolean isUsernameExist(String username){
         boolean result = false;
         Connection con = DBConnection.openConnect();
@@ -133,13 +93,13 @@ public class EmployeeDAL {
         return result;
     }
 
-    public boolean deleteEmployee(String username){
+    public boolean deleteEmployee(int id){
         boolean result = false;
         Connection con = DBConnection.openConnect();
         try{
-            String sql = "DELETE FROM employees WHERE Username = "+username;
+            String sql = "DELETE FROM employees WHERE EmployeeID = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, username);
+            ps.setInt(1, id);
             if(ps.executeUpdate()>=1){
                 result = true;
             }
@@ -150,4 +110,32 @@ public class EmployeeDAL {
         }
         return result;
     }
+
+    public EmployeeDTO loginAndGetEmployee(String username, String password) {
+        EmployeeDTO employee = null;
+        Connection con = DBConnection.openConnect();
+        try {
+            String sql = "SELECT * FROM employees WHERE Username = ? AND Password = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                employee = new EmployeeDTO();
+                employee.setEmployeeID(rs.getInt("EmployeeID"));
+                employee.setUsername(rs.getString("Username"));
+                employee.setPassword(rs.getString("Password"));
+                employee.setPhone(rs.getString("Phone"));
+                employee.setEmail(rs.getString("Email"));
+                employee.setJoinDate(rs.getDate("JoinDate"));
+                employee.setAddress(rs.getString("Address"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Lỗi cơ sở dữ liệu " + ex.getMessage());
+        } finally {
+            DBConnection.closeConnect(con);
+        }
+        return employee;
+    }
+    
 }

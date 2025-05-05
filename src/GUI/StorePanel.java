@@ -12,15 +12,17 @@ import BLL.*;
 import DTO.*;
 
 public class StorePanel extends JPanel{
-    ProductsBLL productsBLL = new ProductsBLL();
-    DefaultTableModel modelTT;
-    JTextField searchTf, phoneTf, tongTf, nhanTf, thoiTf;
-    JButton searchBtn, thanhToanBtn, inBillBtn;
-    JComboBox filterBox;
-    JLabel nameLabel;
-    JTable spTable;
+    private ProductsBLL productsBLL = new ProductsBLL();
+    private EmployeeDTO currentEmployee;
+    private DefaultTableModel modelTT;
+    private JTextField searchTf, phoneTf, tongTf, nhanTf, thoiTf;
+    private JButton searchBtn, addBtn, deleteBtn, resetBtn, payBtn, printBtn;
+    private JComboBox filterBox;
+    private JLabel nameLabel;
+    private JTable spTable;
 
-    public StorePanel(){
+    public StorePanel(EmployeeDTO emp){
+        this.currentEmployee=emp;
         initComponents();
         loadProductList();
        
@@ -46,11 +48,7 @@ public class StorePanel extends JPanel{
         ImageIcon resizedIcon = new ImageIcon(scaledImage);
         searchBtn = new JButton(resizedIcon);
         searchBtn.setBounds(108,45,22,22);
-        searchBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                searchAndFilterAction(e);
-            }
-        });
+        
 
         //Tạo thanh nhập tìm kiếm  
         searchTf = new JTextField();
@@ -60,11 +58,6 @@ public class StorePanel extends JPanel{
         String cb[] = {"Tất cả", "Apple", "Samsung", "Xiaomi", "Realme", "Huawei", "Vinsmart"};
         filterBox = new JComboBox(cb);
         filterBox.setBounds(610,45,80,22);
-        filterBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                searchAndFilterAction(e);
-            }
-        });
 
         //Taọ bảng sản phẩm
         spTable = new JTable();
@@ -86,10 +79,10 @@ public class StorePanel extends JPanel{
         JTable payTable = new JTable();
         JScrollPane payScrollPane = new JScrollPane(payTable);
         payScrollPane.setBounds(10,80,277,300);
-        payTable.setModel(modelTT);
         modelTT.addColumn("Tên điện thoại");
         modelTT.addColumn("Giá");
         modelTT.addColumn("Số lượng");
+        payTable.setModel(modelTT);
 
         //Thông tin thanh toán
         nameLabel = new JLabel("Khách hàng: ");
@@ -104,29 +97,55 @@ public class StorePanel extends JPanel{
         thoiTf = new JTextField();
         thoiTf.setEditable(false);
 
-        thanhToanBtn = new JButton("Thanh Toán");
-        inBillBtn = new JButton("In bill");
+        addBtn = new JButton("Thêm");
+        deleteBtn = new JButton("Xóa");
+        resetBtn = new JButton("Làm mới");
+        payBtn = new JButton("Thanh Toán");
+        printBtn = new JButton("In bill");
+
+        addBtn.setBounds(15,400,80,22);
+        deleteBtn.setBounds(105,400,80,22);
+        resetBtn.setBounds(195,400,85,22);
         
-        nameLabel.setBounds(50,400,150,20);
+        nameLabel.setBounds(50,450,150,20);
 
-        phoneLabel.setBounds(50,430,80,20);
-        phoneTf.setBounds(125,432,100,20);
-        tongLabel.setBounds(50,460,80,20);
-        tongTf.setBounds(125,462,100,20);
-        nhanLabel.setBounds(50,490,80,20);
-        nhanTf.setBounds(125,492,100,20);
-        thoiLabel.setBounds(50,520,80,20);
-        thoiTf.setBounds(125,522,100,20);
+        phoneLabel.setBounds(50,475,80,20);
+        phoneTf.setBounds(125,477,100,20);
+        tongLabel.setBounds(50,500,80,20);
+        tongTf.setBounds(125,502,100,20);
+        nhanLabel.setBounds(50,525,80,20);
+        nhanTf.setBounds(125,527,100,20);
+        thoiLabel.setBounds(50,550,80,20);
+        thoiTf.setBounds(125,552,100,20);
 
-        thanhToanBtn.setBounds(40,570,105,30);
-        inBillBtn.setBounds(175,570,105,30);
+        payBtn.setBounds(30,600,105,30);
+        printBtn.setBounds(165,600,105,30);
 
         //Thêm giao diện vào
         spPanel.add(titlelb);spPanel.add(searchBtn);spPanel.add(searchTf);spPanel.add(filterBox);spPanel.add(sp);
         payPanel.add(payTitle);payPanel.add(nameLabel);payPanel.add(payScrollPane);payPanel.add(phoneLabel);payPanel.add(phoneTf);
         payPanel.add(tongLabel);payPanel.add(tongTf);payPanel.add(nhanLabel);payPanel.add(nhanTf);payPanel.add(thoiLabel);payPanel.add(thoiTf);
-        payPanel.add(thanhToanBtn);payPanel.add(inBillBtn);
+        payPanel.add(payBtn);payPanel.add(printBtn);payPanel.add(addBtn);payPanel.add(deleteBtn);payPanel.add(resetBtn);
         add(spPanel);add(payPanel);
+
+        searchBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                searchAndFilterAction(e);
+            }
+        });
+
+        filterBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                searchAndFilterAction(e);
+            }
+        });
+
+        addBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                addBtnProduct(e);
+            }
+        });
+
     }
 
     public void loadProductList(){
@@ -152,6 +171,7 @@ public class StorePanel extends JPanel{
              modelSP.addRow(row);
         }
     }
+        
 
     public void searchAndFilterAction(ActionEvent e){
         String searchStr = searchTf.getText().trim().toLowerCase();
@@ -190,5 +210,25 @@ public class StorePanel extends JPanel{
             }
         }
         spTable.setModel(modelSp);
+    }
+
+    private void addBtnProduct(ActionEvent e){
+        int rowSl = spTable.getSelectedRow();
+        if(rowSl>=0){
+            String input = JOptionPane.showInputDialog(this, "Nhập số lượng:");
+            if(input!=null&&input.matches("\\d+")){                
+                int stockSp = Integer.parseInt(spTable.getValueAt(rowSl, 4).toString());
+                int sl = Integer.parseInt(input);
+                if(sl>stockSp){
+                    JOptionPane.showMessageDialog(this, "Vượt quá số lượng có thể mua");
+                    return;
+                }                    
+                String tenSp = spTable.getValueAt(rowSl, 1).toString();
+                BigDecimal giaSp = new BigDecimal(spTable.getValueAt(rowSl,3).toString());
+                BigDecimal sumGiaSp = giaSp.multiply(BigDecimal.valueOf(sl));
+                modelTT.addRow(new Object[]{tenSp, sumGiaSp, sl});
+                JOptionPane.showMessageDialog(this, "Thêm thành công");                
+            }
+        }
     }
 }

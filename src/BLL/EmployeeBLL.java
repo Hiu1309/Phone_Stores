@@ -10,30 +10,14 @@ public class EmployeeBLL {
         return emplDAL.getAllEmployees();
     }
 
-    public String login(String username, String password){
-        if(emplDAL.login(username, password))
-        return "Đăng nhập thành công!";
-        return "Sai tên tài khoản hoặc mật khẩu";
-    }
-
-    public String register(EmployeeDTO empl){
-        if(emplDAL.isUsernameExist(empl.getUsername())){
-            return "Tài khoản này đã tồn tại";
-        }
-        if(emplDAL.register(empl)){
-            return "Đăng ký thành công";
-        }
-        return "Đăng ký thất bại";
-    }
-
     public String addEmployee(EmployeeDTO empl){
         if(emplDAL.isUsernameExist(empl.getUsername())){
             return "Tài khoản này đã tồn tại";
         }
         if(emplDAL.addEmployee(empl)){
-            return "Thêm nhân viên thành công";
+            return "Thêm thành công";
         }
-        return "Thêm nhân viên thất bại";
+        return "Thêm thất bại";
     }
     
     public String updateEmployee(EmployeeDTO empl){
@@ -46,10 +30,15 @@ public class EmployeeBLL {
         return "Cập nhật thông tin nhân viên thất bại";
     }
 
-    public String deleteEmployee(String username){
-        if(emplDAL.deleteEmployee(username)){
+    public String deleteEmployee(int id){
+        if(emplDAL.deleteEmployee(id)){
             return "Xoá nhân viên thành công";
         }
         return "Xóa nhân viên thất bại";
     }
+
+    public EmployeeDTO getEmployeeAfterLogin(String username, String password) {
+        return emplDAL.loginAndGetEmployee(username, password);
+    }
+    
 }

@@ -14,6 +14,10 @@ public class RegisterForm extends JFrame {
     private JButton registerButton, loginButton;
 
     public RegisterForm() {
+        initComponents();
+    }
+
+    private void initComponents(){
         setTitle("Đăng ký");
         setSize(350, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -90,9 +94,9 @@ public class RegisterForm extends JFrame {
             empl.setPhone(phone);
 
             EmployeeBLL empBLL = new EmployeeBLL();
-            String result = empBLL.register(empl);
+            String result = empBLL.addEmployee(empl);
             JOptionPane.showMessageDialog(this, result );
-            if(result.equals("Đăng ký thành công")){
+            if(result.equals("Thêm thành công")){
                 dispose();
                 new LoginForm().setVisible(true);            
             }
