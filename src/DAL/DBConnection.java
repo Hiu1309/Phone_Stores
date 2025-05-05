@@ -11,7 +11,7 @@ public class DBConnection {
             String password = "";
             return DriverManager.getConnection(dbUrl, name, password);  
         }catch(SQLException ex){
-            System.out.println("Lỗi cơ sở dữ liệu "+ex.getMessage());
+            System.out.println("Lỗi kết nối cơ sở dữ liệu "+ex.getMessage());
             return null;
         }catch(ClassNotFoundException ex){
             System.out.println("Lỗi không tìm thấy class jdbc "+ex.getMessage());

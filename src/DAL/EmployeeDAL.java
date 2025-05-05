@@ -18,6 +18,9 @@ public class EmployeeDAL {
                 em.setPassword(rs.getString("Password"));
                 em.setUsername(rs.getString("Username"));
                 em.setPhone(rs.getString("Phone"));
+                em.setEmail(rs.getString("Email"));
+                em.setJoinDate(rs.getDate("JoinDate"));
+                em.setAddress(rs.getString("Address"));
                 arr.add(em);
             }
         }catch(SQLException ex){
@@ -28,7 +31,7 @@ public class EmployeeDAL {
         return arr;
     }
 
-    public boolean addEmployee(EmployeeDTO empl){
+    public boolean register(EmployeeDTO empl){
         boolean result = false;
         Connection con = DBConnection.openConnect();
         try{
@@ -77,6 +80,69 @@ public class EmployeeDAL {
             ResultSet rs = ps.executeQuery();
             if(rs.next())
             result = true;
+        }catch(SQLException ex){
+            System.out.println("Lỗi cơ sở dữ liệu "+ex.getMessage());
+        }finally{
+            DBConnection.closeConnect(con);
+        }
+        return result;
+    }
+
+    public boolean addEmployee(EmployeeDTO e){
+        boolean result = false;
+        Connection con = DBConnection.openConnect();
+        try{
+            PreparedStatement ps = con.prepareStatement("INSERT INTO employees(Username, Password, Phone, Email, Address)" +
+            " VALUES(?,?,?,?,?) ");
+            ps.setString(1, e.getUsername());
+            ps.setString(2,e.getPassword());
+            ps.setString(3,e.getPhone());
+            ps.setString(4,e.getEmail());
+            ps.setString(5,e.getAddress());
+            if(ps.executeUpdate()>0){
+                result = true; 
+            }
+        }catch(SQLException ex){
+            System.out.println("Lỗi cơ sở dữ liệu "+ex.getMessage());
+        }finally{
+            DBConnection.closeConnect(con);
+        }
+        return result;
+    }
+
+    public boolean updateEmployee(EmployeeDTO e){
+        boolean result = false;
+        Connection con = DBConnection.openConnect();
+        try{
+            String sql = "UPDATE employees SET Username = ?, Password = ?, Phone = ?, Email = ?, Address = ? WHERE EmployeeID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, e.getUsername());
+            ps.setString(2,e.getPassword());
+            ps.setString(3,e.getPhone());
+            ps.setString(4, e.getEmail());
+            ps.setString(5, e.getAddress());
+            ps.setInt(6, e.getEmployeeID());
+            if(ps.executeUpdate()>=1){
+                result = true;
+            }
+        }catch(SQLException ex){
+            System.out.println("Lỗi cơ sở dữ liệu "+ex.getMessage());
+        }finally{
+            DBConnection.closeConnect(con);
+        }
+        return result;
+    }
+
+    public boolean deleteEmployee(String username){
+        boolean result = false;
+        Connection con = DBConnection.openConnect();
+        try{
+            String sql = "DELETE FROM employees WHERE Username = "+username;
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, username);
+            if(ps.executeUpdate()>=1){
+                result = true;
+            }
         }catch(SQLException ex){
             System.out.println("Lỗi cơ sở dữ liệu "+ex.getMessage());
         }finally{

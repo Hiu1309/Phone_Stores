@@ -3,7 +3,6 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import GUI.*;
 
 public class HomeForm extends JFrame {
     private JPanel contentPanel;  
@@ -61,25 +60,7 @@ public class HomeForm extends JFrame {
 
         add(menuPanel, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);
-        JLabel infoLabel = new JLabel("Di chuột để xem tọa độ và kích thước...");
-        infoLabel.setPreferredSize(new Dimension(1240, 20));
-        infoLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        add(infoLabel, BorderLayout.SOUTH);
-
-        // Bắt sự kiện rê chuột trên contentPanel
-        contentPanel.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                Component source = e.getComponent(); // là contentPanel
-                Point point = e.getPoint(); // vị trí chuột trong contentPanel
-                Rectangle bounds = source.getBounds(); // kích thước contentPanel
-
-                infoLabel.setText(String.format(
-                    "Tọa độ chuột: (%d, %d) | contentPanel (x=%d, y=%d, w=%d, h=%d)",
-                    point.x, point.y, bounds.x, bounds.y, bounds.width, bounds.height
-                ));
-            }
-        }); 
+       
         setVisible(true);
     }
 

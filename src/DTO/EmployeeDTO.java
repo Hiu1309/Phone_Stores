@@ -1,10 +1,15 @@
 package DTO;
 
+import java.sql.Date;
+
 public class EmployeeDTO {
     private int employeeID;
     private String username;
     private String password;
     private String phone;
+    private String email;
+    private Date joinDate;
+    private String address;
 
     public int getEmployeeID() { 
         return employeeID; 
@@ -37,4 +42,27 @@ public class EmployeeDTO {
         this.phone = phone; 
     }
 
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public Date getJoinDate(){
+        return joinDate;
+    }
+
+    public void setJoinDate(Date joiDate){
+        this.joinDate = joiDate;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    public void setAddress(String address){
+        this.address = address;
+    }
 } 

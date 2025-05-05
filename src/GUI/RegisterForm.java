@@ -73,11 +73,6 @@ public class RegisterForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin");   
                 return;                     
             }
-
-            if(!username.matches("^[a-zA-Z0-9]+$")){
-                JOptionPane.showMessageDialog(this, "Tên tài khoản không được chứa ký tự đặc biệt");
-                return;
-            }
             
             if(password.length()<8){
                 JOptionPane.showMessageDialog(this, "Mật khẩu phải từ 8 ký tự trở lên");
@@ -95,7 +90,7 @@ public class RegisterForm extends JFrame {
             empl.setPhone(phone);
 
             EmployeeBLL empBLL = new EmployeeBLL();
-            String result = empBLL.addEmployee(empl);
+            String result = empBLL.register(empl);
             JOptionPane.showMessageDialog(this, result );
             if(result.equals("Đăng ký thành công")){
                 dispose();

@@ -191,5 +191,4 @@ public class StorePanel extends JPanel{
         }
         spTable.setModel(modelSp);
     }
-
 }
