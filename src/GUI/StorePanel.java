@@ -33,7 +33,7 @@ public class StorePanel extends JPanel{
         JPanel spPanel = new JPanel();
         spPanel.setLayout(null);
         spPanel.setBounds(0,0,740,700);
-        spPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        spPanel.setBorder(BorderFactory.createMatteBorder(0,0,0,1,Color.black));
 
         //Thanh tiêu đề giao diện bán hàng
         JLabel titlelb = new JLabel("Danh Sách Sản Phẩm");
@@ -57,7 +57,7 @@ public class StorePanel extends JPanel{
         searchTf.setBounds(130,45,470,22);
 
         //Tạo mục checkbox để lọc sản phẩm
-        String cb[] = {"Tất cả", "Iphone", "Samsung", "Xiaomi", "Realme", "Huawei", "Vinsmart"};
+        String cb[] = {"Tất cả", "Apple", "Samsung", "Xiaomi", "Realme", "Huawei", "Vinsmart"};
         filterBox = new JComboBox(cb);
         filterBox.setBounds(610,45,80,22);
         filterBox.addActionListener(new ActionListener() {
@@ -75,7 +75,6 @@ public class StorePanel extends JPanel{
         JPanel payPanel = new JPanel();
         payPanel.setLayout(null);
         payPanel.setBounds(740,0,380,700);
-        payPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
         //Title thanh toán
         JLabel payTitle = new JLabel("Thanh Toán");
