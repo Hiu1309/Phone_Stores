@@ -376,6 +376,7 @@ public class StorePanel extends JPanel{
             String result = salesInvoiceDetailBLL.addInvoiceDetail(detail);
     
             productsBLL.updateStockAfterSale(productID, quantity); 
+            loadProductList();
         }
     
         JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
