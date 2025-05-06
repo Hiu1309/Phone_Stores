@@ -40,6 +40,8 @@ public class HomeForm extends JFrame {
         statsBtn.setBounds(10, 400, 120, 50);
         JButton customerBtn = new JButton("Khách hàng");
         customerBtn.setBounds(10, 500, 120, 50);
+        JButton invoiceBtn = new JButton("Hóa Đơn");
+        invoiceBtn.setBounds(10,30,120,50);
 
         JButton exitBtn = new JButton("Thoát");
         exitBtn.setBounds(60,600,70,30);
@@ -57,6 +59,7 @@ public class HomeForm extends JFrame {
         menuPanel.add(statsBtn);
         menuPanel.add(customerBtn);
         menuPanel.add(exitBtn);
+        menuPanel.add(invoiceBtn);
 
         // Panel nội dung trung tâm với CardLayout
         contentPanel = new JPanel(new CardLayout());
@@ -65,6 +68,7 @@ public class HomeForm extends JFrame {
         contentPanel.add(new EmployeePanel(), "employee");
         contentPanel.add(new JLabel("Giao diện Thống kê"), "stats");
         contentPanel.add(new CustomerPanel(), "customer");
+        contentPanel.add(new InvoicePanel(), "invoice");
 
         // Sự kiện nút chuyển panel
         storeBtn.addActionListener(e -> switchPanel("store"));
@@ -72,6 +76,7 @@ public class HomeForm extends JFrame {
         employeeBtn.addActionListener(e -> switchPanel("employee"));
         statsBtn.addActionListener(e -> switchPanel("stats"));
         customerBtn.addActionListener(e -> switchPanel("customer"));
+        invoiceBtn.addActionListener(e -> switchPanel("invoice"));
 
         add(menuPanel, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);

@@ -11,11 +11,11 @@ public class SalesInvoiceDetailBLL {
         return detailDAL.getDetailsByInvoiceID(invoiceID);
     }
 
-    public String addInvoiceDetail(SalesInvoiceDetailDTO detail) {
+    public boolean addInvoiceDetail(SalesInvoiceDetailDTO detail) {
         if (detailDAL.addInvoiceDetail(detail)) {
-            return "Thêm chi tiết hóa đơn thành công.";
+            return true;
         }
-        return "Thêm chi tiết hóa đơn thất bại.";
+        return false;
     }
 
     public String addMultipleInvoiceDetails(Vector<SalesInvoiceDetailDTO> detailList) {

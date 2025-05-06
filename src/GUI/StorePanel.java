@@ -373,12 +373,12 @@ public class StorePanel extends JPanel{
             detail.setPrice(price); 
             detail.setTotalPrices(total);
     
-            String result = salesInvoiceDetailBLL.addInvoiceDetail(detail);
-    
+            boolean result = salesInvoiceDetailBLL.addInvoiceDetail(detail);
+            
             productsBLL.updateStockAfterSale(productID, quantity); 
-            loadProductList();
+            
         }
-    
+        loadProductList();
         JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
         resetBtnAction(null);
     }
