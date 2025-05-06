@@ -126,4 +126,80 @@ public class ProductsDAL {
         return result;
     }
     
+    public ProductsDTO getProductsByName(String productName){
+        Connection con = DBConnection.openConnect();
+        ProductsDTO p = null;
+        try{
+            String sql = "SELECT * FROM products WHERE ProductName = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, productName);
+            ResultSet rs = ps.executeQuery();            
+            if(rs.next()){
+                p = new ProductsDTO();
+                p.setProductID(rs.getInt("ProductID"));
+                p.setProductName(rs.getString("ProductName"));
+                p.setType(rs.getString("Type"));
+                p.setBrand(rs.getString("Brand"));
+                p.setStock(rs.getInt("Stock"));
+                p.setPrices(rs.getBigDecimal("Prices"));
+                p.setStatus(rs.getString("Status"));
+                p.setDate(rs.getDate("Date"));
+                p.setImages(rs.getString("Image"));
+            }            
+        } catch(SQLException ex){
+            System.out.println("Lỗi cơ sở dữ liệu " + ex.getMessage());
+        } finally {
+            DBConnection.closeConnect(con);
+        }
+        return p;
+    }
+    
+
+    public ProductsDTO getProductByID(int productID) {
+        Connection con = DBConnection.openConnect();
+        ProductsDTO p = null;
+        try {
+            String sql = "SELECT * FROM products WHERE ProductID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, productID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                p = new ProductsDTO();
+                p.setProductID(rs.getInt("ProductID"));
+                p.setProductName(rs.getString("ProductName"));
+                p.setType(rs.getString("Type"));
+                p.setBrand(rs.getString("Brand"));
+                p.setStock(rs.getInt("Stock"));
+                p.setPrices(rs.getBigDecimal("Prices"));
+                p.setStatus(rs.getString("Status"));
+                p.setDate(rs.getDate("Date"));
+                p.setImages(rs.getString("Image"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi cơ sở dữ liệu " + e.getMessage());
+        } finally {
+            DBConnection.closeConnect(con);
+        }
+        return p;
+    }
+    
+    public boolean updateStock(int productID, int newStock) {
+        Connection con = DBConnection.openConnect();
+        boolean result = false;
+        String sql = "UPDATE products SET Stock = ? WHERE ProductID = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, newStock);
+            ps.setInt(2, productID);
+            if (ps.executeUpdate() >= 1) {
+                result = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi cơ sở dữ liệu " + e.getMessage());
+        } finally {
+            DBConnection.closeConnect(con);
+        }
+        return result;
+    }
+    
 }

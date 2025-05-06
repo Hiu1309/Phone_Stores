@@ -6,20 +6,24 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.util.Vector;
-import java.math.BigDecimal;
+import java.math.*;
+import java.sql.*;
 
 import BLL.*;
 import DTO.*;
 
 public class StorePanel extends JPanel{
     private ProductsBLL productsBLL = new ProductsBLL();
+    private CustomerBLL customerBLL = new CustomerBLL();
+    private SalesInvoiceBLL salesInvoiceBLL = new SalesInvoiceBLL();
+    private SalesInvoiceDetailBLL salesInvoiceDetailBLL = new SalesInvoiceDetailBLL();
     private EmployeeDTO currentEmployee;
     private DefaultTableModel modelTT;
     private JTextField searchTf, phoneTf, tongTf, nhanTf, thoiTf;
     private JButton searchBtn, addBtn, deleteBtn, resetBtn, payBtn, printBtn;
     private JComboBox filterBox;
     private JLabel nameLabel;
-    private JTable spTable;
+    private JTable spTable, payTable;
 
     public StorePanel(EmployeeDTO emp){
         this.currentEmployee=emp;
@@ -76,7 +80,7 @@ public class StorePanel extends JPanel{
 
         //Table hiện thị sản phẩm trong mục thanh toán
         modelTT = new DefaultTableModel();
-        JTable payTable = new JTable();
+        payTable = new JTable();
         JScrollPane payScrollPane = new JScrollPane(payTable);
         payScrollPane.setBounds(10,80,277,300);
         modelTT.addColumn("Tên điện thoại");
@@ -93,9 +97,10 @@ public class StorePanel extends JPanel{
 
         phoneTf = new JTextField();
         tongTf = new JTextField();
+        tongTf.setEnabled(false);
         nhanTf = new JTextField();
         thoiTf = new JTextField();
-        thoiTf.setEditable(false);
+        thoiTf.setEnabled(false);
 
         addBtn = new JButton("Thêm");
         deleteBtn = new JButton("Xóa");
@@ -107,7 +112,7 @@ public class StorePanel extends JPanel{
         deleteBtn.setBounds(105,400,80,22);
         resetBtn.setBounds(195,400,85,22);
         
-        nameLabel.setBounds(50,450,150,20);
+        nameLabel.setBounds(50,450,250,20);
 
         phoneLabel.setBounds(50,475,80,20);
         phoneTf.setBounds(125,477,100,20);
@@ -142,7 +147,37 @@ public class StorePanel extends JPanel{
 
         addBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                addBtnProduct(e);
+                addBtnAction(e);
+            }
+        });
+
+        deleteBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                deleteBtnAction(e);
+            }
+        });
+
+        resetBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                resetBtnAction(e);
+            }
+        });
+
+        phoneTf.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                fillCustomerName(e);
+            }
+        });
+
+        nhanTf.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                updateThoi();
+            }
+        });
+
+        payBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                handlePayment();
             }
         });
 
@@ -212,7 +247,7 @@ public class StorePanel extends JPanel{
         spTable.setModel(modelSp);
     }
 
-    private void addBtnProduct(ActionEvent e){
+    private void addBtnAction(ActionEvent e){
         int rowSl = spTable.getSelectedRow();
         if(rowSl>=0){
             String input = JOptionPane.showInputDialog(this, "Nhập số lượng:");
@@ -227,8 +262,124 @@ public class StorePanel extends JPanel{
                 BigDecimal giaSp = new BigDecimal(spTable.getValueAt(rowSl,3).toString());
                 BigDecimal sumGiaSp = giaSp.multiply(BigDecimal.valueOf(sl));
                 modelTT.addRow(new Object[]{tenSp, sumGiaSp, sl});
-                JOptionPane.showMessageDialog(this, "Thêm thành công");                
+                updateTong();                  
             }
         }
     }
+
+    private void deleteBtnAction(ActionEvent e){
+        int rowSelected = payTable.getSelectedRow();
+        if(rowSelected>=0){
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa không ?", "Xác nhận",JOptionPane.YES_NO_OPTION);
+            if(confirm == JOptionPane.YES_OPTION){
+                modelTT.removeRow(rowSelected);       
+                updateTong();
+            }            
+        }else{
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm để xóa");
+        }
+    }
+
+    private void resetBtnAction(ActionEvent e){                
+            modelTT.setRowCount(0);
+            nameLabel.setText("Khách hàng: ");
+            phoneTf.setText("");
+            tongTf.setText("");
+            nhanTf.setText("");
+            thoiTf.setText("");        
+    }
+
+    private void fillCustomerName(ActionEvent e){
+        String phone = phoneTf.getText().trim();
+        if(phone!=null){
+            CustomerDTO customer = customerBLL.getCustomerByPhone(phone);
+            if(customer!=null){
+                nameLabel.setText("Khách hàng: "+customer.getFullName());                
+            }
+            else{
+                nameLabel.setText("Khách hàng: không có");                
+            }
+        }
+    }
+    
+    BigDecimal total;
+
+    private void updateTong(){
+        total = BigDecimal.ZERO;
+        for(int i=0;i<modelTT.getRowCount();i++){
+            BigDecimal gia = new BigDecimal(modelTT.getValueAt(i, 1).toString());
+            total = total.add(gia);
+        }
+        tongTf.setText(total.toString());
+    }
+
+    private void updateThoi(){
+        try{
+            String tongStr = tongTf.getText().trim();
+            String nhanStr = nhanTf.getText().trim();
+            if(tongStr.equals("")){
+                JOptionPane.showMessageDialog(this, "Vui lòng mua sản phẩm trước khi thanh toán");                
+                return;
+            }
+            if(nhanStr.equals("")){
+                JOptionPane.showMessageDialog(this, "Vui lòng điền tiền nhận");            
+                return;
+            }
+            BigDecimal tong = new BigDecimal(tongStr);
+            BigDecimal nhan = new BigDecimal(nhanStr);
+            if(nhan.compareTo(tong)<0){
+                JOptionPane.showMessageDialog(this, "Không đủ tiền mua hàng");                
+                return;
+            }
+            BigDecimal thoi = nhan.subtract(tong);
+            thoiTf.setText(thoi.toString());        
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Tiền nhận không hợp lệ");
+        }
+    }
+
+    private void handlePayment() {
+        String phone = phoneTf.getText().trim();
+        CustomerDTO customer = customerBLL.getCustomerByPhone(phone);
+        if (customer == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
+            return;
+        }
+    
+        int customerID = customer.getCustomerID();
+        int employeeID = currentEmployee.getEmployeeID(); 
+    
+        SalesInvoiceDTO invoice = new SalesInvoiceDTO();
+        invoice.setCustomerID(customerID);
+        invoice.setEmployeeID(employeeID);
+        invoice.setTotalAmount(total);
+    
+        int invoiceID = salesInvoiceBLL.addSalesInvoiceAndGetID(invoice);
+    
+        for (int i = 0; i < modelTT.getRowCount(); i++) {
+            String productName = modelTT.getValueAt(i, 0).toString();
+            BigDecimal price = new BigDecimal(modelTT.getValueAt(i, 1).toString()); 
+            int quantity = Integer.parseInt(modelTT.getValueAt(i, 2).toString());
+    
+            ProductsDTO product = productsBLL.getProductsByName(productName);
+            if (product == null) continue;
+    
+            int productID = product.getProductID();
+    
+            SalesInvoiceDetailDTO detail = new SalesInvoiceDetailDTO();
+            detail.setInvoiceID(invoiceID);
+            detail.setProductID(productID);
+            detail.setQuantity(quantity);
+            detail.setPrice(price); 
+            detail.setTotalPrices(total);
+    
+            String result = salesInvoiceDetailBLL.addInvoiceDetail(detail);
+    
+            productsBLL.updateStockAfterSale(productID, quantity); 
+        }
+    
+        JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
+        resetBtnAction(null);
+    }
+    
 }

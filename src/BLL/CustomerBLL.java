@@ -31,4 +31,15 @@ public class CustomerBLL {
         }
         return "Xóa khách hàng thất bại";
     }
+
+    public CustomerDTO getCustomerByPhone(String phone){
+        Vector<CustomerDTO> customerArr = customerDAL.getAllCustomers();
+        for(int i=0;i<customerArr.size();i++){
+            CustomerDTO c = customerArr.get(i);
+            if(c.getPhone().equals(phone)){
+                return c;
+            }
+        }
+        return null;
+    }
 }

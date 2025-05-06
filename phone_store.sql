@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 04, 2025 lúc 09:06 AM
+-- Thời gian đã tạo: Th5 06, 2025 lúc 04:48 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -30,12 +30,19 @@ SET time_zone = "+00:00";
 CREATE TABLE `customers` (
   `CustomerID` int(11) NOT NULL,
   `FullName` varchar(100) NOT NULL,
-  `BirthDate` date DEFAULT NULL,
   `Phone` varchar(20) DEFAULT NULL,
   `Email` varchar(100) DEFAULT NULL,
-  `Address` varchar(255) DEFAULT NULL,
-  `CreatedAt` datetime DEFAULT current_timestamp()
+  `CreateDate` datetime NOT NULL DEFAULT current_timestamp(),
+  `Gender` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `customers`
+--
+
+INSERT INTO `customers` (`CustomerID`, `FullName`, `Phone`, `Email`, `CreateDate`, `Gender`) VALUES
+(1, 'Trần Hạnh Hương', '0878886423', 'huong@gmail.com', '2025-05-06 02:57:18', 'Nữ'),
+(2, 'Nguyễn Xuân Mạnh', '0888664578', 'manh@gmail.com', '2025-05-06 09:47:41', 'Nam');
 
 -- --------------------------------------------------------
 
@@ -47,15 +54,18 @@ CREATE TABLE `employees` (
   `EmployeeID` int(11) NOT NULL,
   `Username` varchar(50) NOT NULL,
   `Password` varchar(255) NOT NULL,
-  `Phone` varchar(20) DEFAULT NULL
+  `Phone` varchar(20) NOT NULL,
+  `Email` varchar(50) DEFAULT NULL,
+  `JoinDate` date DEFAULT curdate(),
+  `Address` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `employees`
 --
 
-INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `Phone`) VALUES
-(1, 'hiu', '123123123', '1231231231');
+INSERT INTO `employees` (`EmployeeID`, `Username`, `Password`, `Phone`, `Email`, `JoinDate`, `Address`) VALUES
+(14, 'Hiu', '123123123', '0878985119', 'hiu@gmail.com', '2025-05-06', '36 Lê Lợi');
 
 -- --------------------------------------------------------
 
@@ -80,8 +90,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`ProductID`, `ProductName`, `Type`, `Brand`, `Stock`, `Status`, `Prices`, `Date`, `Image`) VALUES
-(1, 'hi', 'Ios', 'Iphone', 123, 'Còn Hàng', 12323223.00, '2025-05-03', 'C:\\Users\\HELIOS 300\\OneDrive\\ドキュメント\\GitHub\\Web_ban_game\\admin\\assets\\icon\\MT3H.png'),
-(2, 'fffsdfs', 'Android', 'Realme', 123, 'Hết Hàng', 5323223.00, '2025-05-04', 'C:\\Users\\HELIOS 300\\OneDrive\\ドキュメント\\GitHub\\Web_ban_game\\admin\\assets\\icon\\MT3H.png');
+(1, 'iphone 6', 'Ios', 'Iphone', 117, 'Còn Hàng', 4200000.00, '2025-05-03', 'C:\\Users\\HELIOS 300\\OneDrive\\ドキュメント\\GitHub\\Web_ban_game\\admin\\assets\\icon\\MT3H.png'),
+(2, 'realme neo 4', 'Android', 'Realme', 116, 'Còn Hàng', 1350000.00, '2025-05-04', 'C:\\Users\\HELIOS 300\\OneDrive\\ドキュメント\\GitHub\\Web_ban_game\\admin\\assets\\icon\\MT3H.png');
 
 -- --------------------------------------------------------
 
@@ -121,8 +131,18 @@ CREATE TABLE `salesinvoicedetails` (
   `InvoiceID` int(11) DEFAULT NULL,
   `ProductID` int(11) DEFAULT NULL,
   `Quantity` int(11) NOT NULL,
-  `UnitPrice` decimal(15,2) NOT NULL
+  `Prices` decimal(15,2) NOT NULL,
+  `TotalPrices` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `salesinvoicedetails`
+--
+
+INSERT INTO `salesinvoicedetails` (`DetailID`, `InvoiceID`, `ProductID`, `Quantity`, `Prices`, `TotalPrices`) VALUES
+(1, 2, 1, 1, 4200000.00, 4200000.00),
+(2, 3, 1, 1, 4200000.00, 6900000.00),
+(3, 3, 2, 2, 2700000.00, 6900000.00);
 
 -- --------------------------------------------------------
 
@@ -134,8 +154,18 @@ CREATE TABLE `salesinvoices` (
   `InvoiceID` int(11) NOT NULL,
   `CustomerID` int(11) DEFAULT NULL,
   `EmployeeID` int(11) DEFAULT NULL,
-  `SaleDate` datetime DEFAULT current_timestamp()
+  `SaleDate` datetime DEFAULT current_timestamp(),
+  `TotalAmount` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `salesinvoices`
+--
+
+INSERT INTO `salesinvoices` (`InvoiceID`, `CustomerID`, `EmployeeID`, `SaleDate`, `TotalAmount`) VALUES
+(1, 1, 14, '2025-05-06 09:43:28', 4200000.00),
+(2, 1, 14, '2025-05-06 09:46:18', 4200000.00),
+(3, 2, 14, '2025-05-06 09:48:06', 6900000.00);
 
 -- --------------------------------------------------------
 
@@ -218,19 +248,31 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT cho bảng `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT cho bảng `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
   MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21313;
+
+--
+-- AUTO_INCREMENT cho bảng `salesinvoicedetails`
+--
+ALTER TABLE `salesinvoicedetails`
+  MODIFY `DetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT cho bảng `salesinvoices`
+--
+ALTER TABLE `salesinvoices`
+  MODIFY `InvoiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

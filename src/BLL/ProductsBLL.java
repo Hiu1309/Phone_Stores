@@ -1,6 +1,7 @@
 package BLL;
 
 import DAL.ProductsDAL;
+import DTO.EmployeeDTO;
 import DTO.ProductsDTO;
 import java.util.Vector;
 
@@ -34,4 +35,18 @@ public class ProductsBLL {
         }
         return "Thêm sản phẩm thất bại";
     }
+
+    public ProductsDTO getProductsByName(String name){
+        return productDAL.getProductsByName(name);
+    }
+
+    public void updateStockAfterSale(int productID, int quantitySold) {
+        ProductsDTO product = productDAL.getProductByID(productID);
+        if (product != null) {
+            int newStock = product.getStock() - quantitySold;
+            if (newStock < 0) newStock = 0;
+            productDAL.updateStock(productID, newStock);
+        }
+    }
+    
 }
