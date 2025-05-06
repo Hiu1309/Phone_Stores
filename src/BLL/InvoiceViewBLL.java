@@ -2,46 +2,25 @@ package BLL;
 
 import DAL.InvoiceViewDAL;
 import DTO.InvoiceViewDTO;
+import java.sql.Date;
 import java.util.Vector;
 
 public class InvoiceViewBLL {
-    private InvoiceViewDAL invoiceViewDAL;
-
-    public InvoiceViewBLL() {
-        invoiceViewDAL = new InvoiceViewDAL();
-    }
+    private final InvoiceViewDAL invoiceDAL = new InvoiceViewDAL();
 
     public Vector<InvoiceViewDTO> getAllInvoiceViews() {
-        return invoiceViewDAL.getAllInvoiceViews();
+        return invoiceDAL.getAllInvoiceViews();
     }
 
-    public Vector<InvoiceViewDTO> getInvoiceViewsByCustomerName(String customerName) {
-        Vector<InvoiceViewDTO> result = new Vector<>();
-        for (InvoiceViewDTO iv : getAllInvoiceViews()) {
-            if (iv.getCustomerName().toLowerCase().contains(customerName.toLowerCase())) {
-                result.add(iv);
-            }
-        }
-        return result;
+    public Vector<InvoiceViewDTO> getInvoicesByCustomerName(String name) {
+        return invoiceDAL.getInvoicesByCustomerName(name);
     }
 
-    public Vector<InvoiceViewDTO> getInvoiceViewsByEmployeeName(String employeeName) {
-        Vector<InvoiceViewDTO> result = new Vector<>();
-        for (InvoiceViewDTO iv : getAllInvoiceViews()) {
-            if (iv.getEmployeeName().toLowerCase().contains(employeeName.toLowerCase())) {
-                result.add(iv);
-            }
-        }
-        return result;
+    public Vector<InvoiceViewDTO> getInvoicesByEmployeeName(String name) {
+        return invoiceDAL.getInvoicesByEmployeeName(name);
     }
 
-    public Vector<InvoiceViewDTO> getInvoiceViewsByDate(java.util.Date date) {
-        Vector<InvoiceViewDTO> result = new Vector<>();
-        for (InvoiceViewDTO iv : getAllInvoiceViews()) {
-            if (iv.getSaleDate().equals(date)) {
-                result.add(iv);
-            }
-        }
-        return result;
+    public Vector<InvoiceViewDTO> getInvoicesByDate(Date date) {
+        return invoiceDAL.getInvoicesByDate(date);
     }
 }
